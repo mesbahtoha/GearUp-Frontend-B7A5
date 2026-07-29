@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GearUp - Sports & Outdoor Gear Rental Platform
+
+Rent sports & outdoor gear instantly. GearUp connects customers with equipment providers for seamless gear rental.
+
+## Tech Stack
+
+- **Next.js 16** (App Router)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **shadcn/ui** (base-ui components)
+- **TanStack Query** (data fetching)
+- **React Hook Form + Zod** (form validation)
+- **Sonner** (toast notifications)
+- **Stripe** (payment integration)
+
+## Admin Credentials
+
+- **Email:** admin@gmail.com
+- **Password:** admin123
 
 ## Getting Started
 
-First, run the development server:
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Set up environment variables
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=https://gearup-backend-b7a4.onrender.com/api
+```
+
+### 3. Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Build for production
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Start production server
 
-## Learn More
+```bash
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── actions/          # Server actions
+├── app/              # Next.js App Router pages
+│   ├── (auth)/       # Login, Register
+│   ├── (public)/     # Home, Gear listing, Gear details
+│   ├── dashboard/    # Customer, Provider, Admin dashboards
+│   └── payment/      # Success & Cancel pages
+├── components/
+│   ├── layouts/      # Navbar, Footer, DashboardSidebar
+│   ├── modules/      # Feature-specific components
+│   ├── shared/       # Container, Loading, Empty, Error states
+│   └── ui/           # shadcn/ui components
+├── constants/        # Routes, Roles
+├── context/          # AuthContext
+├── hooks/            # Custom hooks
+├── lib/              # Utilities, fetch wrapper
+├── providers/        # React providers (Query, Auth)
+├── schemas/          # Zod validation schemas
+├── services/         # API service layer
+├── types/            # TypeScript types
+└── middleware.ts     # Route protection
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Features
 
-## Deploy on Vercel
+### Public
+- Home page with featured gears
+- Gear listing with search, category filter, price filter
+- Gear details with image gallery and rental form
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Customer
+- Dashboard with stats
+- Rental history with payment
+- Review management
+- Profile management
+- Stripe checkout integration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Provider
+- Dashboard with stats
+- Inventory management (CRUD)
+- Order management (confirm, pickup, return, cancel)
+- Profile management
+
+### Admin
+- Dashboard with platform stats
+- User management (suspend, activate, role change)
+- Rental management
+- Payment management
+
+## API Documentation
+
+See [API_INTEGRATION.md](./API_INTEGRATION.md) for complete API endpoint mapping.
+
+## Backend
+
+Backend repository: GearUp - Backend
+Live API: https://gearup-backend-b7a4.onrender.com/api
