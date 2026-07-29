@@ -51,20 +51,18 @@ export default function AddGearPage() {
     defaultValues: {
       name: "",
       description: "",
+      brand: "",
       pricePerDay: 0,
-      location: "",
+      stock: 1,
       categoryId: "",
-      images: "",
-      availability: true,
+      image: "",
+      isAvailable: true,
     },
   });
 
   const createMutation = useMutation({
     mutationFn: (values: GearFormValues) =>
-      gearService.create({
-        ...values,
-        images: values.images.split("\n").filter(Boolean),
-      }),
+      gearService.create(values),
     onSuccess: () => {
       toast.success("Gear added successfully");
       router.push("/dashboard/provider/inventory");
@@ -177,39 +175,56 @@ export default function AddGearPage() {
 
               <FormField
                 control={form.control}
-                name="location"
+                name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Brand</FormLabel>
                     <FormControl>
-                      <Input placeholder="City, Area" {...field} />
+                      <Input placeholder="Brand name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URLs</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Enter image URLs (one per line)"
-                        rows={3}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stock</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          value={field.value}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
-                name="availability"
+                name="isAvailable"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between rounded-lg border p-3">
                     <div>

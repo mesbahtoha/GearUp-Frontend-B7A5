@@ -13,7 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Bike, ArrowRight, Star, Shield, Clock, MapPin } from "lucide-react";
+import { Bike, ArrowRight, Shield, Clock } from "lucide-react";
 import Image from "next/image";
 
 export default function HomePage() {
@@ -22,7 +22,7 @@ export default function HomePage() {
     queryFn: () => gearService.getAll({ limit: "6" }),
   });
 
-  const gears = gearsRes?.data?.items || [];
+  const gears = gearsRes?.data || [];
 
   return (
     <div>
@@ -136,7 +136,7 @@ export default function HomePage() {
                   <Card className="overflow-hidden h-full transition-shadow hover:shadow-lg">
                     <div className="relative h-48">
                       <Image
-                        src={gear.images?.[0] || "/placeholder.svg"}
+                        src={gear.image || "/placeholder.svg"}
                         alt={gear.name}
                         fill
                         className="object-cover"
@@ -144,10 +144,10 @@ export default function HomePage() {
                       <div className="absolute top-2 right-2">
                         <Badge
                           variant={
-                            gear.availability ? "default" : "secondary"
+                            gear.isAvailable ? "default" : "secondary"
                           }
                         >
-                          {gear.availability ? "Available" : "Rented"}
+                          {gear.isAvailable ? "Available" : "Rented"}
                         </Badge>
                       </div>
                     </div>
@@ -156,10 +156,6 @@ export default function HomePage() {
                       <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                         {gear.description}
                       </p>
-                      <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground">
-                        <MapPin className="h-3 w-3" />
-                        {gear.location}
-                      </div>
                     </CardContent>
                     <CardFooter className="p-4 pt-0 flex items-center justify-between">
                       <p className="text-lg font-bold text-primary">

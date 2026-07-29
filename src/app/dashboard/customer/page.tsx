@@ -4,11 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { dashboardService } from "@/services/dashboard.service";
 import Container from "@/components/shared/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import ErrorState from "@/components/shared/ErrorState";
-import { Calendar, DollarSign, ShoppingBag, TrendingUp } from "lucide-react";
+import { Calendar, DollarSign, ShoppingBag } from "lucide-react";
 
 export default function CustomerDashboardPage() {
   const {
@@ -31,8 +29,8 @@ export default function CustomerDashboardPage() {
 
   const stats = [
     {
-      title: "Total Rentals",
-      value: dashboard.totalRentals,
+      title: "Total Orders",
+      value: dashboard.totalOrders,
       icon: ShoppingBag,
     },
     {
@@ -42,18 +40,10 @@ export default function CustomerDashboardPage() {
     },
     {
       title: "Active Rentals",
-      value: dashboard.activeRentals,
+      value: dashboard.activeOrders,
       icon: Calendar,
     },
   ];
-
-  const statusColors: Record<string, string> = {
-    PENDING: "bg-yellow-100 text-yellow-800",
-    CONFIRMED: "bg-blue-100 text-blue-800",
-    PICKED_UP: "bg-purple-100 text-purple-800",
-    RETURNED: "bg-green-100 text-green-800",
-    CANCELLED: "bg-red-100 text-red-800",
-  };
 
   return (
     <div className="space-y-8">
@@ -82,92 +72,6 @@ export default function CustomerDashboardPage() {
           );
         })}
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Rentals</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {dashboard.recentRentals.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-8 text-center">
-              No rentals yet. Start by browsing gears!
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {dashboard.recentRentals.map((rental) => (
-                <div
-                  key={rental.id}
-                  className="flex items-center justify-between border-b pb-3 last:border-0"
-                >
-                  <div>
-                    <p className="font-medium">
-                      {rental.gear?.name || "Gear"}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(rental.startDate).toLocaleDateString()} -{" "}
-                      {new Date(rental.endDate).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <p className="font-semibold">৳{rental.totalPrice}</p>
-                    <Badge
-                      className={`${
-                        statusColors[rental.status] || "bg-gray-100"
-                      }`}
-                    >
-                      {rental.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Payment History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {dashboard.payments.length === 0 ? (
-            <p className="text-muted-foreground text-sm py-8 text-center">
-              No payments yet.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {dashboard.payments.map((payment) => (
-                <div
-                  key={payment.id}
-                  className="flex items-center justify-between border-b pb-3 last:border-0"
-                >
-                  <div>
-                    <p className="font-medium">
-                      Payment for{" "}
-                      {payment.rental?.gear?.name || "Rental"}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {new Date(payment.createdAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <p className="font-semibold">৳{payment.amount}</p>
-                    <Badge
-                      variant={
-                        payment.status === "COMPLETED"
-                          ? "default"
-                          : "secondary"
-                      }
-                    >
-                      {payment.status}
-                    </Badge>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }

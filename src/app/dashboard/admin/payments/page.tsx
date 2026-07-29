@@ -18,7 +18,6 @@ const paymentStatusColors: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
   COMPLETED: "bg-green-100 text-green-800",
   FAILED: "bg-red-100 text-red-800",
-  REFUNDED: "bg-purple-100 text-purple-800",
 };
 
 export default function AdminPaymentsPage() {
@@ -72,15 +71,13 @@ export default function AdminPaymentsPage() {
               payments.map((payment) => (
                 <TableRow key={payment.id}>
                   <TableCell className="font-mono text-sm">
-                    {payment.transactionId ||
-                      payment.stripeSessionId?.slice(0, 15) + "..." ||
-                      "N/A"}
+                    {payment.transactionId || "N/A"}
                   </TableCell>
                   <TableCell>
-                    {payment.rental?.customer?.name || "N/A"}
+                    {payment.rentalOrder?.customer?.name || "N/A"}
                   </TableCell>
                   <TableCell>
-                    {payment.rental?.gear?.name || "N/A"}
+                    {payment.rentalOrder?.gear?.name || "N/A"}
                   </TableCell>
                   <TableCell className="font-medium">
                     ৳{payment.amount}

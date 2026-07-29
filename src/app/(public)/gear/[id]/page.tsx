@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Star, MapPin, Calendar, User, ChevronLeft } from "lucide-react";
+import { Star, Calendar, User, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,8 +33,6 @@ export default function GearDetailsPage() {
   const { user } = useAuth();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedImage, setSelectedImage] = useState(0);
-
   const { data: gearRes, isLoading } = useQuery({
     queryKey: ["gear", params.id],
     queryFn: () => gearService.getById(params.id as string),
@@ -51,7 +49,7 @@ export default function GearDetailsPage() {
   const reviews = reviewsRes?.data || [];
 
   const createRentalMutation = useMutation({
-    mutationFn: (data: { gearId: string; startDate: string; endDate: string }) =>
+    mutationFn: (data: { gearId: string; quantity: number; startDate: string; endDate: string }) =>
       rentalService.create(data),
     onSuccess: (res) => {
       toast.success("Rental created successfully!");
@@ -77,6 +75,7 @@ export default function GearDetailsPage() {
     }
     createRentalMutation.mutate({
       gearId: params.id as string,
+      quantity: 1,
       startDate,
       endDate,
     });
@@ -140,34 +139,12 @@ export default function GearDetailsPage() {
         <div>
           <div className="relative h-80 md:h-96 rounded-lg overflow-hidden">
             <Image
-              src={gear.images?.[selectedImage] || "/placeholder.svg"}
+              src={gear.image || "/placeholder.svg"}
               alt={gear.name}
               fill
               className="object-cover"
             />
           </div>
-          {gear.images && gear.images.length > 1 && (
-            <div className="flex gap-2 mt-4">
-              {gear.images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`relative h-20 w-20 rounded-md overflow-hidden border-2 ${
-                    selectedImage === idx
-                      ? "border-primary"
-                      : "border-transparent"
-                  }`}
-                >
-                  <Image
-                    src={img}
-                    alt={`${gear.name} ${idx + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
         </div>
 
         <div>
@@ -176,9 +153,9 @@ export default function GearDetailsPage() {
               <h1 className="text-3xl font-bold">{gear.name}</h1>
               <div className="flex items-center gap-2 mt-2">
                 <Badge
-                  variant={gear.availability ? "default" : "secondary"}
+                  variant={gear.isAvailable ? "default" : "secondary"}
                 >
-                  {gear.availability ? "Available" : "Rented"}
+                  {gear.isAvailable ? "Available" : "Rented"}
                 </Badge>
                 {gear.category && (
                   <Badge variant="outline">{gear.category.name}</Badge>
@@ -191,11 +168,6 @@ export default function GearDetailsPage() {
                 /day
               </span>
             </p>
-          </div>
-
-          <div className="flex items-center gap-1 mt-4 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            {gear.location}
           </div>
 
           <p className="mt-4 text-muted-foreground">{gear.description}</p>
@@ -223,7 +195,7 @@ export default function GearDetailsPage() {
             </Card>
           )}
 
-          {gear.availability && (
+          {gear.isAvailable && (
             <Card className="mt-6">
               <CardHeader className="p-4 pb-2">
                 <CardTitle className="text-sm font-medium">

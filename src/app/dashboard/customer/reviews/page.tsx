@@ -180,7 +180,7 @@ function EditReviewForm({
   onSubmit,
   loading,
 }: {
-  review: { rating: number; comment: string };
+  review: { rating: number; comment?: string | null };
   onSubmit: (data: ReviewFormValues) => void;
   loading: boolean;
 }) {
@@ -188,7 +188,7 @@ function EditReviewForm({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       rating: review.rating,
-      comment: review.comment,
+      comment: review.comment || "",
     },
   });
 

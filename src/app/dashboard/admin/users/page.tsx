@@ -80,7 +80,7 @@ export default function AdminUsersPage() {
   if (error)
     return <ErrorState message="Failed to load users" onRetry={refetch} />;
 
-  const users = usersRes?.data?.items || [];
+  const users = usersRes?.data || [];
 
   return (
     <div className="space-y-6">

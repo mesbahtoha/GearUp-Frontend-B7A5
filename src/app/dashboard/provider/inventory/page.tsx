@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import ErrorState from "@/components/shared/ErrorState";
 import EmptyState from "@/components/shared/EmptyState";
-import { Plus, Pencil, Trash2, MapPin } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function InventoryPage() {
@@ -79,9 +79,9 @@ export default function InventoryPage() {
               <div className="flex items-start justify-between">
                 <CardTitle className="text-lg">{gear.name}</CardTitle>
                 <Badge
-                  variant={gear.availability ? "default" : "secondary"}
+                  variant={gear.isAvailable ? "default" : "secondary"}
                 >
-                  {gear.availability ? "Available" : "Rented"}
+                  {gear.isAvailable ? "Available" : "Rented"}
                 </Badge>
               </div>
             </CardHeader>
@@ -89,10 +89,6 @@ export default function InventoryPage() {
               <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
                 {gear.description}
               </p>
-              <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground">
-                <MapPin className="h-3 w-3" />
-                {gear.location}
-              </div>
               <p className="text-lg font-bold text-primary mt-2">
                 ৳{gear.pricePerDay}
                 <span className="text-sm font-normal text-muted-foreground">

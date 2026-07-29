@@ -60,11 +60,12 @@ export default function EditGearPage() {
     defaultValues: {
       name: "",
       description: "",
+      brand: "",
       pricePerDay: 0,
-      location: "",
+      stock: 1,
       categoryId: "",
-      images: "",
-      availability: true,
+      image: "",
+      isAvailable: true,
     },
   });
 
@@ -73,21 +74,19 @@ export default function EditGearPage() {
       form.reset({
         name: gear.name,
         description: gear.description,
+        brand: gear.brand,
         pricePerDay: gear.pricePerDay,
-        location: gear.location,
+        stock: gear.stock,
         categoryId: gear.categoryId,
-        images: gear.images?.join("\n") || "",
-        availability: gear.availability,
+        image: gear.image || "",
+        isAvailable: gear.isAvailable,
       });
     }
   }, [gear, form]);
 
   const updateMutation = useMutation({
     mutationFn: (values: GearFormValues) =>
-      gearService.update(params.id as string, {
-        ...values,
-        images: values.images.split("\n").filter(Boolean),
-      }),
+      gearService.update(params.id as string, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["my-gears"] });
       toast.success("Gear updated successfully");
@@ -207,35 +206,56 @@ export default function EditGearPage() {
 
               <FormField
                 control={form.control}
-                name="location"
+                name="brand"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Brand</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder="Brand name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URLs (one per line)</FormLabel>
-                    <FormControl>
-                      <Textarea rows={3} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="stock"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Stock</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={1}
+                          value={field.value}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL</FormLabel>
+                      <FormControl>
+                        <Input placeholder="https://..." {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
-                name="availability"
+                name="isAvailable"
                 render={({ field }) => (
                   <FormItem className="flex items-center justify-between rounded-lg border p-3">
                     <div>

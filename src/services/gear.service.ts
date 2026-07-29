@@ -15,14 +15,35 @@ export const gearService = {
     return apiFetch<ApiResponse<IGear[]>>("/gears/my-gears");
   },
 
-  create(payload: Record<string, unknown>) {
+  create(payload: {
+    name: string;
+    description: string;
+    brand: string;
+    image?: string;
+    pricePerDay: number;
+    stock: number;
+    categoryId: string;
+    isAvailable?: boolean;
+  }) {
     return apiFetch<ApiResponse<IGear>>("/gears", {
       method: "POST",
       body: payload,
     });
   },
 
-  update(id: string, payload: Record<string, unknown>) {
+  update(
+    id: string,
+    payload: Partial<{
+      name: string;
+      description: string;
+      brand: string;
+      image: string;
+      pricePerDay: number;
+      stock: number;
+      isAvailable: boolean;
+      categoryId: string;
+    }>
+  ) {
     return apiFetch<ApiResponse<IGear>>(`/gears/${id}`, {
       method: "PATCH",
       body: payload,

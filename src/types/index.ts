@@ -21,80 +21,90 @@ export interface IGear {
   id: string;
   name: string;
   description: string;
-  images: string[];
+  brand: string;
+  image: string | null;
   pricePerDay: number;
-  location: string;
-  categoryId: string;
-  category?: ICategory;
-  providerId: string;
-  provider?: IUser;
-  status: "AVAILABLE" | "RENTED" | "MAINTENANCE";
-  availability: boolean;
+  stock: number;
+  isAvailable: boolean;
   createdAt: string;
   updatedAt: string;
+  providerId: string;
+  provider?: IUser;
+  categoryId: string;
+  category?: ICategory;
 }
 
 export interface IRental {
   id: string;
-  gearId: string;
-  gear?: IGear;
-  customerId: string;
-  customer?: IUser;
+  quantity: number;
   startDate: string;
   endDate: string;
   totalPrice: number;
-  status: "PENDING" | "CONFIRMED" | "PICKED_UP" | "RETURNED" | "CANCELLED";
+  status: "PLACED" | "CONFIRMED" | "PAID" | "PICKED_UP" | "RETURNED" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
+  customerId: string;
+  customer?: IUser;
+  gearId: string;
+  gear?: IGear;
+  payment?: IPayment;
 }
 
 export interface IPayment {
   id: string;
-  rentalId: string;
-  rental?: IRental;
-  customerId: string;
   amount: number;
-  status: "PENDING" | "COMPLETED" | "FAILED" | "REFUNDED";
   transactionId?: string;
-  stripeSessionId?: string;
+  provider: "STRIPE" | "SSLCOMMERZ";
+  status: "PENDING" | "COMPLETED" | "FAILED";
+  paidAt?: string;
   createdAt: string;
+  updatedAt: string;
+  rentalOrderId: string;
+  rentalOrder?: IRental;
 }
 
 export interface IReview {
   id: string;
-  gearId: string;
-  gear?: IGear;
-  customerId: string;
-  customer?: IUser;
   rating: number;
-  comment: string;
+  comment?: string;
   createdAt: string;
   updatedAt: string;
+  customerId: string;
+  customer?: IUser;
+  gearId: string;
+  gear?: IGear;
 }
 
 export interface IDashboardCustomer {
-  totalRentals: number;
+  totalOrders: number;
+  activeOrders: number;
+  returnedOrders: number;
+  cancelledOrders: number;
   totalSpent: number;
-  activeRentals: number;
-  recentRentals: IRental[];
-  payments: IPayment[];
 }
 
 export interface IDashboardProvider {
-  totalGears: number;
-  totalOrders: number;
-  activeRentals: number;
-  totalEarnings: number;
-  recentOrders: IRental[];
+  totalGear: number;
+  totalRentals: number;
+  pendingOrders: number;
+  confirmedOrders: number;
+  returnedOrders: number;
+  totalRevenue: number;
 }
 
 export interface IDashboardAdmin {
   totalUsers: number;
+  totalCustomers: number;
+  totalProviders: number;
+  activeUsers: number;
+  suspendedUsers: number;
+  totalCategories: number;
   totalGears: number;
+  availableGears: number;
   totalRentals: number;
+  completedRentals: number;
+  totalPayments: number;
   totalRevenue: number;
-  recentUsers: IUser[];
-  recentRentals: IRental[];
 }
 
 export interface ApiResponse<T> {
@@ -108,11 +118,11 @@ export interface PaginatedResponse<T> {
   success: boolean;
   statusCode: number;
   message: string;
-  data: {
-    items: T[];
-    total: number;
+  data: T[];
+  meta: {
     page: number;
     limit: number;
-    totalPages: number;
+    total: number;
+    totalPage: number;
   };
 }

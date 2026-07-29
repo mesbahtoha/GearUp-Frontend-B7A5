@@ -5,7 +5,7 @@ import { dashboardService } from "@/services/dashboard.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import ErrorState from "@/components/shared/ErrorState";
-import { Users, Package, ShoppingBag, DollarSign } from "lucide-react";
+import { Users, Package, ShoppingBag, DollarSign, UserCheck, UserX, Layers, CheckCircle, CreditCard } from "lucide-react";
 
 export default function AdminDashboardPage() {
   const {
@@ -32,6 +32,16 @@ export default function AdminDashboardPage() {
       icon: Users,
     },
     {
+      title: "Customers",
+      value: dashboard.totalCustomers,
+      icon: UserCheck,
+    },
+    {
+      title: "Providers",
+      value: dashboard.totalProviders,
+      icon: UserX,
+    },
+    {
       title: "Total Gears",
       value: dashboard.totalGears,
       icon: Package,
@@ -40,6 +50,11 @@ export default function AdminDashboardPage() {
       title: "Total Rentals",
       value: dashboard.totalRentals,
       icon: ShoppingBag,
+    },
+    {
+      title: "Total Payments",
+      value: dashboard.totalPayments,
+      icon: CreditCard,
     },
     {
       title: "Total Revenue",
@@ -57,7 +72,7 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -74,74 +89,6 @@ export default function AdminDashboardPage() {
             </Card>
           );
         })}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {dashboard.recentUsers.length === 0 ? (
-              <p className="text-muted-foreground text-sm py-8 text-center">
-                No users yet.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {dashboard.recentUsers.map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between border-b pb-2 last:border-0"
-                  >
-                    <div>
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {user.email}
-                      </p>
-                    </div>
-                    <span className="text-xs bg-muted px-2 py-1 rounded">
-                      {user.role}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Rentals</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {dashboard.recentRentals.length === 0 ? (
-              <p className="text-muted-foreground text-sm py-8 text-center">
-                No rentals yet.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {dashboard.recentRentals.map((rental) => (
-                  <div
-                    key={rental.id}
-                    className="flex items-center justify-between border-b pb-2 last:border-0"
-                  >
-                    <div>
-                      <p className="font-medium">
-                        {rental.gear?.name || "Gear"}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        ৳{rental.totalPrice}
-                      </p>
-                    </div>
-                    <span className="text-xs bg-muted px-2 py-1 rounded">
-                      {rental.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

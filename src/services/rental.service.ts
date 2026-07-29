@@ -1,28 +1,38 @@
 import { apiFetch } from "./api";
-import type { ApiResponse, IRental } from "@/types";
+import type { ApiResponse, IRental, PaginatedResponse } from "@/types";
 
 export const rentalService = {
-  create(payload: { gearId: string; startDate: string; endDate: string }) {
+  create(payload: {
+    gearId: string;
+    quantity: number;
+    startDate: string;
+    endDate: string;
+  }) {
     return apiFetch<ApiResponse<IRental>>("/rentals", {
       method: "POST",
       body: payload,
     });
   },
 
-  getMyRentals() {
-    return apiFetch<ApiResponse<IRental[]>>("/rentals/my-rentals");
+  getMyRentals(params?: Record<string, string>) {
+    const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch<PaginatedResponse<IRental>>(`/rentals/my-rentals${query}`);
   },
 
-  getProviderOrders() {
-    return apiFetch<ApiResponse<IRental[]>>("/rentals/provider-orders");
+  getProviderOrders(params?: Record<string, string>) {
+    const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch<PaginatedResponse<IRental>>(
+      `/rentals/provider-orders${query}`
+    );
   },
 
   getById(id: string) {
     return apiFetch<ApiResponse<IRental>>(`/rentals/${id}`);
   },
 
-  getAll() {
-    return apiFetch<ApiResponse<IRental[]>>("/rentals/all");
+  getAll(params?: Record<string, string>) {
+    const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch<PaginatedResponse<IRental>>(`/rentals/all${query}`);
   },
 
   confirm(id: string) {

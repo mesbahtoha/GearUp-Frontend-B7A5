@@ -6,98 +6,146 @@
 
 ### Authentication
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `LoginPage` (`(auth)/login/page.tsx`) | `POST /api/auth/login` | Authenticate user with email/password |
-| `RegisterPage` (`(auth)/register/page.tsx`) | `POST /api/users/register` | Create new user account |
-| `AuthContext` (`context/AuthContext.tsx`) | `GET /api/users/me` | Fetch current authenticated user profile |
-| `AuthContext` (`context/AuthContext.tsx`) | `POST /api/auth/logout` | Clear authentication session |
-| `AuthContext` (`context/AuthContext.tsx`) | `POST /api/auth/refresh-token` | Refresh JWT access token |
-| `ProfilePage` (`dashboard/*/profile/page.tsx`) | `PATCH /api/auth/change-password` | Change user password |
-| `ProfilePage` (`dashboard/*/profile/page.tsx`) | `PUT /api/users/my-profile` | Update user name/phone |
-
----
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `LoginPage` | `/api/auth/login` | POST | Authenticate user, sets httpOnly JWT cookies |
+| `RegisterPage` | `/api/users/register` | POST | Create new user account |
+| `AuthContext` | `/api/users/me` | GET | Fetch current authenticated user profile |
+| `AuthContext` | `/api/auth/logout` | POST | Clear httpOnly JWT cookies |
+| `AuthContext` | `/api/auth/refresh-token` | POST | Refresh JWT access token via refreshToken cookie |
+| `ProfilePage` | `/api/auth/change-password` | PATCH | Change user password (old + new) |
+| `ProfilePage` | `/api/users/my-profile` | PUT | Update user name/phone |
 
 ### Public Pages
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `HomePage` (`page.tsx`) | `GET /api/gears` | Display featured gears on landing page |
-| `GearListingPage` (`(public)/gear/page.tsx`) | `GET /api/gears` | Browse/search/filter available gears |
-| `GearListingPage` (`(public)/gear/page.tsx`) | `GET /api/categories` | Load category filter options |
-| `GearDetailsPage` (`(public)/gear/[id]/page.tsx`) | `GET /api/gears/:id` | Load single gear details |
-| `GearDetailsPage` (`(public)/gear/[id]/page.tsx`) | `GET /api/reviews/gear/:gearId` | Load reviews for a gear |
-
----
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `HomePage` | `/api/gears?limit=6` | GET | Display featured gears on landing page |
+| `GearListingPage` | `/api/gears` | GET | Browse/search/filter gears (paginated) |
+| `GearListingPage` | `/api/categories` | GET | Load category filter options |
+| `GearDetailsPage` | `/api/gears/:id` | GET | Load single gear with category + provider |
+| `GearDetailsPage` | `/api/reviews/gear/:gearId` | GET | Load reviews for a gear |
 
 ### Customer Dashboard
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `CustomerDashboardPage` (`dashboard/customer/page.tsx`) | `GET /api/dashboard/customer` | Load customer dashboard stats |
-| `MyRentalsPage` (`dashboard/customer/rentals/page.tsx`) | `GET /api/rentals/my-rentals` | Load customer rental history |
-| `MyRentalsPage` (`dashboard/customer/rentals/page.tsx`) | `POST /api/payments/checkout/:rentalId` | Initiate Stripe checkout payment |
-| `MyReviewsPage` (`dashboard/customer/reviews/page.tsx`) | `GET /api/reviews/my-reviews` | Load customer's reviews |
-| `MyReviewsPage` (`dashboard/customer/reviews/page.tsx`) | `PATCH /api/reviews/:id` | Update a review |
-| `MyReviewsPage` (`dashboard/customer/reviews/page.tsx`) | `DELETE /api/reviews/:id` | Delete a review |
-| `ProfilePage` (`dashboard/customer/profile/page.tsx`) | `PUT /api/users/my-profile` | Update profile information |
-| `ProfilePage` (`dashboard/customer/profile/page.tsx`) | `PATCH /api/auth/change-password` | Change password |
-| `GearDetailsPage` (`(public)/gear/[id]/page.tsx`) | `POST /api/rentals` | Create a new rental booking |
-
----
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `CustomerDashboardPage` | `/api/dashboard/customer` | GET | Load customer stats (totalOrders, activeOrders, totalSpent) |
+| `MyRentalsPage` | `/api/rentals/my-rentals` | GET | Load paginated customer rental history |
+| `MyRentalsPage` | `/api/payments/checkout/:rentalId` | POST | Create Stripe Checkout session, returns checkoutUrl |
+| `MyReviewsPage` | `/api/reviews/my-reviews` | GET | Load customer's reviews with gear info |
+| `MyReviewsPage` | `/api/reviews/:id` | PATCH | Update a review (rating/comment) |
+| `MyReviewsPage` | `/api/reviews/:id` | DELETE | Delete a review |
+| `ProfilePage` | `/api/users/my-profile` | PUT | Update name/phone |
+| `ProfilePage` | `/api/auth/change-password` | PATCH | Change password |
+| `GearDetailsPage` | `/api/rentals` | POST | Create rental (gearId, quantity, startDate, endDate) |
 
 ### Provider Dashboard
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `ProviderDashboardPage` (`dashboard/provider/page.tsx`) | `GET /api/dashboard/provider` | Load provider dashboard stats |
-| `InventoryPage` (`dashboard/provider/inventory/page.tsx`) | `GET /api/gears/my-gears` | Load provider's gear inventory |
-| `AddGearPage` (`dashboard/provider/inventory/new/page.tsx`) | `POST /api/gears` | Add new gear listing |
-| `EditGearPage` (`dashboard/provider/inventory/[id]/edit/page.tsx`) | `PATCH /api/gears/:id` | Update gear listing |
-| `InventoryPage` (`dashboard/provider/inventory/page.tsx`) | `DELETE /api/gears/:id` | Delete gear listing |
-| `ProviderOrdersPage` (`dashboard/provider/orders/page.tsx`) | `GET /api/rentals/provider-orders` | Load provider's rental orders |
-| `ProviderOrdersPage` (`dashboard/provider/orders/page.tsx`) | `PATCH /api/rentals/:id/confirm` | Confirm a rental order |
-| `ProviderOrdersPage` (`dashboard/provider/orders/page.tsx`) | `PATCH /api/rentals/:id/pickup` | Mark rental as picked up |
-| `ProviderOrdersPage` (`dashboard/provider/orders/page.tsx`) | `PATCH /api/rentals/:id/return` | Mark rental as returned |
-| `ProviderOrdersPage` (`dashboard/provider/orders/page.tsx`) | `PATCH /api/rentals/:id/cancel` | Cancel a rental order |
-| `EditGearPage/AddGearPage` | `GET /api/categories` | Load categories for form select |
-
----
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `ProviderDashboardPage` | `/api/dashboard/provider` | GET | Load provider stats (totalGear, totalRentals, totalRevenue) |
+| `InventoryPage` | `/api/gears/my-gears` | GET | Load provider's gear inventory |
+| `AddGearPage` | `/api/gears` | POST | Create gear (name, description, brand, pricePerDay, stock, categoryId) |
+| `EditGearPage` | `/api/gears/:id` | PATCH | Update gear fields |
+| `InventoryPage` | `/api/gears/:id` | DELETE | Delete gear listing |
+| `ProviderOrdersPage` | `/api/rentals/provider-orders` | GET | Load paginated provider's rental orders |
+| `ProviderOrdersPage` | `/api/rentals/:id/confirm` | PATCH | Confirm rental (PLACED → CONFIRMED) |
+| `ProviderOrdersPage` | `/api/rentals/:id/pickup` | PATCH | Mark rental as picked up (PAID → PICKED_UP) |
+| `ProviderOrdersPage` | `/api/rentals/:id/return` | PATCH | Mark rental as returned (PICKED_UP → RETURNED) |
+| `ProviderOrdersPage` | `/api/rentals/:id/cancel` | PATCH | Cancel rental (PLACED only) |
+| `AddGearPage`/`EditGearPage` | `/api/categories` | GET | Load categories for dropdown |
 
 ### Admin Dashboard
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `AdminDashboardPage` (`dashboard/admin/page.tsx`) | `GET /api/admin/dashboard` | Load admin dashboard stats |
-| `AdminUsersPage` (`dashboard/admin/users/page.tsx`) | `GET /api/admin/users` | Load all users with pagination |
-| `AdminUsersPage` (`dashboard/admin/users/page.tsx`) | `PATCH /api/admin/users/:id/suspend` | Suspend a user |
-| `AdminUsersPage` (`dashboard/admin/users/page.tsx`) | `PATCH /api/admin/users/:id/activate` | Activate a suspended user |
-| `AdminUsersPage` (`dashboard/admin/users/page.tsx`) | `PATCH /api/admin/users/:id/role` | Change user role |
-| `AdminRentalsPage` (`dashboard/admin/rentals/page.tsx`) | `GET /api/admin/rentals` | Load all platform rentals |
-| `AdminRentalsPage` (`dashboard/admin/rentals/page.tsx`) | `PATCH /api/rentals/:id/cancel` | Cancel any rental |
-| `AdminPaymentsPage` (`dashboard/admin/payments/page.tsx`) | `GET /api/admin/payments` | Load all payment transactions |
-
----
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `AdminDashboardPage` | `/api/admin/dashboard` | GET | Load platform stats (users, gears, rentals, revenue) |
+| `AdminUsersPage` | `/api/admin/users` | GET | Load paginated users with search/role/status filter |
+| `AdminUsersPage` | `/api/admin/users/:id/suspend` | PATCH | Suspend a user |
+| `AdminUsersPage` | `/api/admin/users/:id/activate` | PATCH | Activate a suspended user |
+| `AdminUsersPage` | `/api/admin/users/:id/role` | PATCH | Change user role |
+| `AdminRentalsPage` | `/api/admin/rentals` | GET | Load all platform rentals (paginated) |
+| `AdminRentalsPage` | `/api/rentals/:id/cancel` | PATCH | Cancel any rental |
+| `AdminPaymentsPage` | `/api/admin/payments` | GET | Load all payment transactions (paginated) |
 
 ### Payment Flow
 
-| Frontend Component | API Endpoint | Purpose |
-|-------------------|-------------|---------|
-| `MyRentalsPage` (`dashboard/customer/rentals/page.tsx`) | `POST /api/payments/checkout/:rentalId` | Create Stripe Checkout session |
-| `PaymentSuccessPage` (`payment/success/page.tsx`) | — | Handle successful Stripe redirect |
-| `PaymentCancelPage` (`payment/cancel/page.tsx`) | — | Handle cancelled Stripe redirect |
+| Frontend Component | API Endpoint | Method | Purpose |
+|-------------------|-------------|--------|---------|
+| `MyRentalsPage` | `/api/payments/checkout/:rentalId` | POST | Create Stripe Checkout session, returns `{ checkoutUrl }` |
+| `PaymentSuccessPage` | — | — | Handles Stripe redirect after successful payment |
+| `PaymentCancelPage` | — | — | Handles Stripe redirect after cancelled payment |
 
 ---
 
-### Services Layer Architecture
+## Backend Response Formats
+
+### Standard Response
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Success message",
+  "data": { ... }
+}
+```
+
+### Paginated Response
+```json
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Success message",
+  "data": [ ... ],
+  "meta": {
+    "page": 1,
+    "limit": 10,
+    "total": 50,
+    "totalPage": 5
+  }
+}
+```
+
+### Error Response
+```json
+{
+  "success": false,
+  "statusCode": 500,
+  "message": "Error message"
+}
+```
+
+## Rental Status Flow
+
+```
+PLACED → CONFIRMED → PAID → PICKED_UP → RETURNED
+    ↓         ↓
+  CANCELLED
+```
+
+- `PLACED`: Initial state after customer creates rental
+- `CONFIRMED`: Provider confirms the order
+- `PAID`: Stripe webhook confirms payment
+- `PICKED_UP`: Provider marks gear as picked up
+- `RETURNED`: Provider marks gear as returned
+- `CANCELLED`: Can be cancelled from PLACED status
+
+## Authentication
+
+- JWT tokens stored in httpOnly cookies:
+  - `accessToken`: 24h expiry
+  - `refreshToken`: 7d expiry
+- All API calls use `credentials: "include"` for cookie transmission
+- Token refresh via `POST /api/auth/refresh-token` reads `refreshToken` cookie
+- Logout clears both cookies
+
+## Services Layer Architecture
 
 ```
 Component/Page
-  ↓ (useQuery / useMutation)
-Service Function
-  ↓ (apiFetch / fetchData)
+  ↓ (useQuery / useMutation hook)
+Service Function (gear.service.ts, rental.service.ts, etc.)
+  ↓ (apiFetch<T>() generic wrapper)
 Backend API (https://gearup-backend-b7a4.onrender.com/api)
 ```
-
-All API calls use `credentials: "include"` for cookie-based authentication.
-Responses follow the `ApiResponse<T>` format: `{ success, statusCode, message, data }`.

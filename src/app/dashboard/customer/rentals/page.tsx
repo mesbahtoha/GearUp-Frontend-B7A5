@@ -18,8 +18,9 @@ import EmptyState from "@/components/shared/EmptyState";
 import { toast } from "sonner";
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+  PLACED: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
   CONFIRMED: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+  PAID: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400",
   PICKED_UP: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
   RETURNED: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
   CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
@@ -41,8 +42,8 @@ export default function MyRentalsPage() {
   const handlePayment = async (rentalId: string) => {
     try {
       const res = await paymentService.checkout(rentalId);
-      if (res.data?.url) {
-        window.location.href = res.data.url;
+      if (res.data?.checkoutUrl) {
+        window.location.href = res.data.checkoutUrl;
       } else {
         toast.error("Failed to get payment URL");
       }
@@ -106,7 +107,7 @@ export default function MyRentalsPage() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {rental.status === "PENDING" && (
+                  {rental.status === "PLACED" && (
                     <Button
                       onClick={() => handlePayment(rental.id)}
                     >

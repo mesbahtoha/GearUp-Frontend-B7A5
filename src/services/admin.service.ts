@@ -1,13 +1,15 @@
 import { apiFetch } from "./api";
-import type { ApiResponse, IRental, IPayment } from "@/types";
+import type { ApiResponse, IRental, IPayment, PaginatedResponse } from "@/types";
 
 export const adminService = {
-  getRentals() {
-    return apiFetch<ApiResponse<IRental[]>>("/admin/rentals");
+  getRentals(params?: Record<string, string>) {
+    const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch<PaginatedResponse<IRental>>(`/admin/rentals${query}`);
   },
 
-  getPayments() {
-    return apiFetch<ApiResponse<IPayment[]>>("/admin/payments");
+  getPayments(params?: Record<string, string>) {
+    const query = params ? "?" + new URLSearchParams(params).toString() : "";
+    return apiFetch<PaginatedResponse<IPayment>>(`/admin/payments${query}`);
   },
 
   deleteGear(id: string) {

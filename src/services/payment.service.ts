@@ -3,7 +3,7 @@ import type { ApiResponse } from "@/types";
 
 export const paymentService = {
   checkout(rentalId: string) {
-    return apiFetch<ApiResponse<{ url: string }>>(
+    return apiFetch<ApiResponse<{ checkoutUrl: string }>>(
       `/payments/checkout/${rentalId}`,
       { method: "POST" }
     );

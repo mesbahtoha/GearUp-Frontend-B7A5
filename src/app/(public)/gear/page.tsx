@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import {
   Search,
-  MapPin,
   SlidersHorizontal,
   X,
 } from "lucide-react";
@@ -55,7 +54,7 @@ export default function GearListingPage() {
     queryFn: () => categoryService.getAll(),
   });
 
-  const gears = gearsRes?.data?.items || [];
+  const gears = gearsRes?.data || [];
   const categories = categoriesRes?.data || [];
 
   const clearFilters = () => {
@@ -223,14 +222,14 @@ export default function GearListingPage() {
               <Card className="overflow-hidden h-full transition-shadow hover:shadow-lg">
                 <div className="relative h-48">
                   <Image
-                    src={gear.images?.[0] || "/placeholder.svg"}
+                    src={gear.image || "/placeholder.svg"}
                     alt={gear.name}
                     fill
                     className="object-cover"
                   />
                   <div className="absolute top-2 right-2">
-                    <Badge variant={gear.availability ? "default" : "secondary"}>
-                      {gear.availability ? "Available" : "Rented"}
+                    <Badge variant={gear.isAvailable ? "default" : "secondary"}>
+                      {gear.isAvailable ? "Available" : "Rented"}
                     </Badge>
                   </div>
                 </div>
@@ -239,10 +238,6 @@ export default function GearListingPage() {
                   <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
                     {gear.description}
                   </p>
-                  <div className="flex items-center gap-1 mt-2 text-sm text-muted-foreground">
-                    <MapPin className="h-3 w-3" />
-                    {gear.location}
-                  </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 flex items-center justify-between">
                   <p className="text-lg font-bold text-primary">
@@ -261,12 +256,12 @@ export default function GearListingPage() {
         </div>
       )}
 
-      {gearsRes?.data && "totalPages" in gearsRes.data && gearsRes.data.totalPages > 1 && (
+      {gearsRes?.meta && gearsRes.meta.totalPage > 1 && (
         <div className="flex justify-center mt-8 gap-2">
-          {Array.from({ length: gearsRes.data.totalPages }).map((_, i) => (
+          {Array.from({ length: gearsRes.meta.totalPage }).map((_, i) => (
             <Button
               key={i}
-              variant={gearsRes.data.page === i + 1 ? "default" : "outline"}
+              variant={gearsRes.meta.page === i + 1 ? "default" : "outline"}
               size="sm"
             >
               {i + 1}
