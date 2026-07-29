@@ -149,6 +149,11 @@ export default function ProviderOrdersPage() {
                     </>
                   )}
                   {order.status === "CONFIRMED" && (
+                    <Badge className="bg-blue-100 text-blue-800">
+                      Waiting for Payment
+                    </Badge>
+                  )}
+                  {order.status === "PAID" && (
                     <Button
                       size="sm"
                       onClick={() => pickupMutation.mutate(order.id)}

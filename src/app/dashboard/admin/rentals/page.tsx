@@ -115,8 +115,8 @@ export default function AdminRentalsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    {rental.status !== "RETURNED" &&
-                      rental.status !== "CANCELLED" && (
+                    {(rental.status === "PLACED" ||
+                      rental.status === "CONFIRMED") && (
                         <Button
                           variant="outline"
                           size="sm"

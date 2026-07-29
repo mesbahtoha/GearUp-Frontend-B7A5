@@ -54,7 +54,6 @@ export default function DashboardSidebar() {
   const handleLogout = async () => {
     await logout();
     router.push("/");
-    router.refresh();
   };
 
   return (

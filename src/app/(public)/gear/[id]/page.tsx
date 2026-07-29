@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { gearService } from "@/services/gear.service";
 import { rentalService } from "@/services/rental.service";
 import { reviewService } from "@/services/review.service";
@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -33,6 +34,9 @@ export default function GearDetailsPage() {
   const { user } = useAuth();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+  const queryClient = useQueryClient();
   const { data: gearRes, isLoading } = useQuery({
     queryKey: ["gear", params.id],
     queryFn: () => gearService.getById(params.id as string),
@@ -58,6 +62,18 @@ export default function GearDetailsPage() {
     onError: (error: Error) => {
       toast.error(error.message || "Failed to create rental");
     },
+  });
+
+  const createReviewMutation = useMutation({
+    mutationFn: (data: { gearId: string; rating: number; comment: string }) =>
+      reviewService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews", params.id] });
+      setReviewRating(5);
+      setReviewComment("");
+      toast.success("Review submitted successfully!");
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const handleRent = () => {
@@ -298,6 +314,64 @@ export default function GearDetailsPage() {
               </Card>
             ))}
           </div>
+        )}
+
+        {user?.role === "CUSTOMER" && (
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Write a Review</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Rating</Label>
+                <div className="flex items-center gap-1 mt-1">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setReviewRating(i + 1)}
+                      className="transition-colors"
+                    >
+                      <Star
+                        className={`h-6 w-6 ${
+                          i < reviewRating
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-muted-foreground"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="reviewComment">Comment</Label>
+                <Textarea
+                  id="reviewComment"
+                  placeholder="Share your experience..."
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  className="min-h-[80px]"
+                />
+              </div>
+              <Button
+                onClick={() =>
+                  createReviewMutation.mutate({
+                    gearId: params.id as string,
+                    rating: reviewRating,
+                    comment: reviewComment,
+                  })
+                }
+                disabled={
+                  createReviewMutation.isPending ||
+                  reviewComment.trim().length < 3
+                }
+              >
+                {createReviewMutation.isPending
+                  ? "Submitting..."
+                  : "Submit Review"}
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </div>
     </Container>

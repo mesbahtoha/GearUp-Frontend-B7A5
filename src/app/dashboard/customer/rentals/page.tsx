@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { rentalService } from "@/services/rental.service";
 import { paymentService } from "@/services/payment.service";
@@ -28,6 +28,7 @@ const statusColors: Record<string, string> = {
 
 export default function MyRentalsPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: rentalsRes,
@@ -37,6 +38,15 @@ export default function MyRentalsPage() {
   } = useQuery({
     queryKey: ["my-rentals"],
     queryFn: () => rentalService.getMyRentals(),
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: (id: string) => rentalService.cancel(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-rentals"] });
+      toast.success("Rental cancelled");
+    },
+    onError: (err: Error) => toast.error(err.message),
   });
 
   const handlePayment = async (rentalId: string) => {
@@ -108,11 +118,34 @@ export default function MyRentalsPage() {
                 </div>
                 <div className="flex gap-2">
                   {rental.status === "PLACED" && (
-                    <Button
-                      onClick={() => handlePayment(rental.id)}
-                    >
-                      Pay Now
-                    </Button>
+                    <>
+                      <Badge className="bg-yellow-100 text-yellow-800">
+                        Awaiting Confirmation
+                      </Badge>
+                      <Button
+                        variant="outline"
+                        className="text-destructive"
+                        onClick={() => cancelMutation.mutate(rental.id)}
+                        disabled={cancelMutation.isPending}
+                      >
+                        Cancel
+                      </Button>
+                    </>
+                  )}
+                  {rental.status === "CONFIRMED" && (
+                    <>
+                      <Button onClick={() => handlePayment(rental.id)}>
+                        Pay Now
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="text-destructive"
+                        onClick={() => cancelMutation.mutate(rental.id)}
+                        disabled={cancelMutation.isPending}
+                      >
+                        Cancel
+                      </Button>
+                    </>
                   )}
                   {rental.status === "PICKED_UP" && (
                     <Button variant="outline" disabled>

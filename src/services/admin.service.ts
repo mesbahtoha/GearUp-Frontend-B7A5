@@ -1,15 +1,29 @@
 import { apiFetch } from "./api";
-import type { ApiResponse, IRental, IPayment, PaginatedResponse } from "@/types";
+import type { ApiResponse, IRental, IPayment, PaginatedResponse, Meta } from "@/types";
 
 export const adminService = {
-  getRentals(params?: Record<string, string>) {
+  async getRentals(params?: Record<string, string>) {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    return apiFetch<PaginatedResponse<IRental>>(`/admin/rentals${query}`);
+    const raw = await apiFetch<any>(`/admin/rentals${query}`);
+    return {
+      success: raw.success,
+      statusCode: raw.statusCode,
+      message: raw.message,
+      data: (raw.data?.data || []) as IRental[],
+      meta: (raw.data?.meta || { page: 1, limit: 10, total: 0, totalPage: 1 }) as Meta,
+    } as PaginatedResponse<IRental>;
   },
 
-  getPayments(params?: Record<string, string>) {
+  async getPayments(params?: Record<string, string>) {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    return apiFetch<PaginatedResponse<IPayment>>(`/admin/payments${query}`);
+    const raw = await apiFetch<any>(`/admin/payments${query}`);
+    return {
+      success: raw.success,
+      statusCode: raw.statusCode,
+      message: raw.message,
+      data: (raw.data?.data || []) as IPayment[],
+      meta: (raw.data?.meta || { page: 1, limit: 10, total: 0, totalPage: 1 }) as Meta,
+    } as PaginatedResponse<IPayment>;
   },
 
   deleteGear(id: string) {

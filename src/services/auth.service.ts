@@ -1,52 +1,49 @@
-import { fetchData } from "./fetch";
-
-import type {
-  LoginPayload,
-  RegisterPayload,
-} from "@/types/auth";
+import { apiFetch } from "./api";
+import type { ApiResponse } from "@/types";
+import type { IUser, LoginPayload, RegisterPayload } from "@/types/auth";
 
 export const authService = {
   login(payload: LoginPayload) {
-    return fetchData("/auth/login", {
+    return apiFetch<ApiResponse<{ accessToken: string; refreshToken: string }>>("/auth/login", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: payload,
     });
   },
 
   register(payload: RegisterPayload) {
-    return fetchData("/users/register", {
+    return apiFetch<ApiResponse<IUser>>("/users/register", {
       method: "POST",
-      body: JSON.stringify(payload),
+      body: payload,
     });
   },
 
   getMyProfile() {
-    return fetchData("/users/me");
+    return apiFetch<ApiResponse<IUser>>("/users/me");
   },
 
   logout() {
-    return fetchData("/auth/logout", {
+    return apiFetch<ApiResponse<null>>("/auth/logout", {
       method: "POST",
     });
   },
 
   refreshToken() {
-    return fetchData("/auth/refresh-token", {
+    return apiFetch<ApiResponse<{ accessToken: string }>>("/auth/refresh-token", {
       method: "POST",
     });
   },
 
   changePassword(payload: { oldPassword: string; newPassword: string }) {
-    return fetchData("/auth/change-password", {
+    return apiFetch<ApiResponse<null>>("/auth/change-password", {
       method: "PATCH",
-      body: JSON.stringify(payload),
+      body: payload,
     });
   },
 
   updateProfile(payload: Partial<{ name: string; phone: string }>) {
-    return fetchData("/users/my-profile", {
+    return apiFetch<ApiResponse<IUser>>("/users/my-profile", {
       method: "PUT",
-      body: JSON.stringify(payload),
+      body: payload,
     });
   },
 };

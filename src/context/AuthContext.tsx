@@ -47,7 +47,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await authService.getMyProfile();
       setUser(res.data);
     } catch {
-      setUser(null);
+      try {
+        await authService.refreshToken();
+        const res = await authService.getMyProfile();
+        setUser(res.data);
+      } catch {
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }

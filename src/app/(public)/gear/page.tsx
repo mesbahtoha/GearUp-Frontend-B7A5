@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useCallback } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams, useRouter } from "next/navigation";
 import { gearService } from "@/services/gear.service";
 import { categoryService } from "@/services/category.service";
 import Container from "@/components/shared/container";
@@ -30,12 +31,37 @@ import {
 import Image from "next/image";
 
 export default function GearListingPage() {
-  const [search, setSearch] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [availability, setAvailability] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  return (
+    <Suspense fallback={<div className="py-8 text-center">Loading...</div>}>
+      <GearListingContent />
+    </Suspense>
+  );
+}
+
+function GearListingContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const readParam = (key: string, fallback = "") => searchParams.get(key) || fallback;
+
+  const [search, setSearch] = useState(readParam("search"));
+  const [categoryId, setCategoryId] = useState(readParam("categoryId"));
+  const [availability, setAvailability] = useState(readParam("availability"));
+  const [minPrice, setMinPrice] = useState(readParam("minPrice"));
+  const [maxPrice, setMaxPrice] = useState(readParam("maxPrice"));
+  const [page, setPage] = useState(Number(readParam("page", "1")));
   const [showFilters, setShowFilters] = useState(false);
+
+  const syncUrl = useCallback(
+    (overrides: Record<string, string>) => {
+      const p = new URLSearchParams();
+      const vals = { search, categoryId, availability, minPrice, maxPrice, page: String(page), ...overrides };
+      Object.entries(vals).forEach(([k, v]) => { if (v && v !== "1") p.set(k, v); });
+      const qs = p.toString();
+      router.replace(qs ? `/gear?${qs}` : "/gear", { scroll: false });
+    },
+    [search, categoryId, availability, minPrice, maxPrice, page, router]
+  );
 
   const params: Record<string, string> = {};
   if (search) params.search = search;
@@ -43,6 +69,7 @@ export default function GearListingPage() {
   if (availability) params.availability = availability;
   if (minPrice) params.minPrice = minPrice;
   if (maxPrice) params.maxPrice = maxPrice;
+  if (page > 1) params.page = String(page);
 
   const { data: gearsRes, isLoading } = useQuery({
     queryKey: ["gears", params],
@@ -63,9 +90,16 @@ export default function GearListingPage() {
     setAvailability("");
     setMinPrice("");
     setMaxPrice("");
+    setPage(1);
+    router.replace("/gear", { scroll: false });
   };
 
   const hasFilters = search || categoryId || availability || minPrice || maxPrice;
+
+  const goToPage = (p: number) => {
+    setPage(p);
+    syncUrl({ page: String(p) });
+  };
 
   return (
     <Container className="py-8">
@@ -92,11 +126,19 @@ export default function GearListingPage() {
           <Input
             placeholder="Search gears..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+              syncUrl({ search: e.target.value, page: "1" });
+            }}
             className="pl-10"
           />
         </div>
-        <Select value={categoryId} onValueChange={(v) => setCategoryId(v ?? "")}>
+        <Select value={categoryId || null} onValueChange={(v) => {
+          setCategoryId(v ?? "");
+          setPage(1);
+          syncUrl({ categoryId: v ?? "", page: "1" });
+        }}>
           <SelectTrigger className="w-[180px] hidden md:flex">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
@@ -109,7 +151,11 @@ export default function GearListingPage() {
             ))}
           </SelectContent>
         </Select>
-        <Select value={availability} onValueChange={(v) => setAvailability(v ?? "")}>
+        <Select value={availability || null} onValueChange={(v) => {
+          setAvailability(v ?? "");
+          setPage(1);
+          syncUrl({ availability: v ?? "", page: "1" });
+        }}>
           <SelectTrigger className="w-[140px] hidden md:flex">
             <SelectValue placeholder="All" />
           </SelectTrigger>
@@ -123,7 +169,11 @@ export default function GearListingPage() {
 
       {showFilters && (
         <div className="md:hidden flex flex-wrap gap-3 mb-4 p-4 border rounded-lg">
-          <Select value={categoryId} onValueChange={(v) => setCategoryId(v ?? "")}>
+          <Select value={categoryId || null} onValueChange={(v) => {
+            setCategoryId(v ?? "");
+            setPage(1);
+            syncUrl({ categoryId: v ?? "", page: "1" });
+          }}>
             <SelectTrigger className="flex-1 min-w-[140px]">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
@@ -136,7 +186,11 @@ export default function GearListingPage() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={availability} onValueChange={(v) => setAvailability(v ?? "")}>
+          <Select value={availability || null} onValueChange={(v) => {
+            setAvailability(v ?? "");
+            setPage(1);
+            syncUrl({ availability: v ?? "", page: "1" });
+          }}>
             <SelectTrigger className="flex-1 min-w-[120px]">
               <SelectValue placeholder="Availability" />
             </SelectTrigger>
@@ -150,14 +204,22 @@ export default function GearListingPage() {
             type="number"
             placeholder="Min price"
             value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
+            onChange={(e) => {
+              setMinPrice(e.target.value);
+              setPage(1);
+              syncUrl({ minPrice: e.target.value, page: "1" });
+            }}
             className="flex-1 min-w-[100px]"
           />
           <Input
             type="number"
             placeholder="Max price"
             value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
+            onChange={(e) => {
+              setMaxPrice(e.target.value);
+              setPage(1);
+              syncUrl({ maxPrice: e.target.value, page: "1" });
+            }}
             className="flex-1 min-w-[100px]"
           />
         </div>
@@ -168,14 +230,22 @@ export default function GearListingPage() {
           type="number"
           placeholder="Min price"
           value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
+          onChange={(e) => {
+            setMinPrice(e.target.value);
+            setPage(1);
+            syncUrl({ minPrice: e.target.value, page: "1" });
+          }}
           className="w-[130px]"
         />
         <Input
           type="number"
           placeholder="Max price"
           value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
+          onChange={(e) => {
+            setMaxPrice(e.target.value);
+            setPage(1);
+            syncUrl({ maxPrice: e.target.value, page: "1" });
+          }}
           className="w-[130px]"
         />
       </div>
@@ -257,16 +327,33 @@ export default function GearListingPage() {
       )}
 
       {gearsRes?.meta && gearsRes.meta.totalPage > 1 && (
-        <div className="flex justify-center mt-8 gap-2">
+        <div className="flex justify-center items-center mt-8 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page <= 1}
+            onClick={() => goToPage(page - 1)}
+          >
+            Prev
+          </Button>
           {Array.from({ length: gearsRes.meta.totalPage }).map((_, i) => (
             <Button
               key={i}
               variant={gearsRes.meta.page === i + 1 ? "default" : "outline"}
               size="sm"
+              onClick={() => goToPage(i + 1)}
             >
               {i + 1}
             </Button>
           ))}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={page >= gearsRes.meta.totalPage}
+            onClick={() => goToPage(page + 1)}
+          >
+            Next
+          </Button>
         </div>
       )}
     </Container>
