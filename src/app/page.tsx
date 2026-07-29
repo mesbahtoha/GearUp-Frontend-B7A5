@@ -1,4 +1,9 @@
+"use client";
+
 import Container from "@/components/shared/container";
+import { Button } from "@/components/ui/button";
+
+import { toast } from "sonner";
 
 export default function HomePage() {
   return (
@@ -11,6 +16,14 @@ export default function HomePage() {
         <p className="mt-4 text-muted-foreground">
           Sports & Outdoor Equipment Rental Platform
         </p>
+
+         <Button
+      onClick={() =>
+        toast.success("GearUp Ready 🚀")
+      }
+    >
+      Test Toast
+    </Button>
       </Container>
     </main>
   );
