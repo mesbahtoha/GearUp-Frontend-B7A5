@@ -1,89 +1,149 @@
-# GearUp Frontend — API Integration Mapping
+# 🔗 GearUp Frontend — API Integration Mapping
 
-Base URL: `http://localhost:5000/api`
-
----
-
-## Authentication
-
-| Frontend Route / Component | Backend Endpoint | Method | Description |
-|---------------------------|------------------|--------|-------------|
-| `/auth/login` — Login form | `/auth/login` | POST | Authenticate user, returns JWT tokens |
-| `/auth/register` — Register form | `/users/register` | POST | Create new user account (CUSTOMER or PROVIDER) |
-| Logout button (Navbar) | `/auth/logout` | POST | Clear auth cookies |
-| `api.ts` auto-refresh logic | `/auth/refresh-token` | POST | Refresh access token using refresh token |
-| `AuthInitializer` (providers.tsx) | `/users/me` | GET | Fetch authenticated user profile |
-
-## Public — Gear Browsing
-
-| Frontend Route / Component | Backend Endpoint | Method | Description |
-|---------------------------|------------------|--------|-------------|
-| Home page featured grid | `/gears` | GET | List gears (paginated, with search/filter) |
-| `/gear` — Browse & filter | `/gears` | GET | Paginated gear list with filters |
-| Home page categories | `/categories` | GET | List all categories |
-| `/gear` filter sidebar | `/categories` | GET | Categories for filter dropdown |
-| `/gear/[id]` — Gear details | `/gears/:id` | GET | Single gear with category & provider info |
-| `/gear/[id]` — Reviews section | `/reviews/gear/:gearId` | GET | All reviews for a gear item |
-
-## Customer — Rental & Payment
-
-| Frontend Route / Component | Backend Endpoint | Method | Description |
-|---------------------------|------------------|--------|-------------|
-| `/dashboard/customer` — Dashboard | `/dashboard/customer` | GET | Customer dashboard stats |
-| `/dashboard/customer/orders` — My Orders | `/rentals/my-rentals` | GET | Customer's rentals (paginated, filterable) |
-| Gear detail page — Rent Now | `/rentals` | POST | Create new rental order (PLACED) |
-| Customer orders — Cancel button | `/rentals/:id/cancel` | PATCH | Cancel a PLACED/CONFIRMED order |
-| `/dashboard/customer/orders/[id]/pay` | `/payments/checkout/:rentalId` | POST | Create Stripe Checkout session |
-| `/dashboard/customer/reviews` — My Reviews | `/reviews/my-reviews` | GET | Customer's submitted reviews |
-| Review form submission | `/reviews` | POST | Create review for returned gear |
-| Delete review | `/reviews/:id` | DELETE | Remove own review |
-
-## Provider — Inventory & Orders
-
-| Frontend Route / Component | Backend Endpoint | Method | Description |
-|---------------------------|------------------|--------|-------------|
-| `/dashboard/provider` — Dashboard | `/dashboard/provider` | GET | Provider dashboard stats |
-| `/dashboard/provider/gear` — My Gear | `/gears/my-gears` | GET | Provider's owned gear items |
-| `/dashboard/provider/gear/new` — Add Gear | `/gears` | POST | Create new gear listing |
-| `/dashboard/provider/gear/[id]/edit` | `/gears/:id` | PATCH | Update own gear listing |
-| My Gear page — Delete | `/gears/:id` | DELETE | Delete own gear |
-| My Gear page — Toggle availability | `/gears/:id` | PATCH | Update isAvailable flag |
-| `/dashboard/provider/orders` — Orders | `/rentals/provider-orders` | GET | Incoming orders for provider's gear |
-| Confirm order | `/rentals/:id/confirm` | PATCH | Confirm PLACED order |
-| Mark Picked Up | `/rentals/:id/pickup` | PATCH | Mark PAID order as PICKED_UP |
-| Mark Returned | `/rentals/:id/return` | PATCH | Mark PICKED_UP order as RETURNED |
-| Cancel order (provider) | `/rentals/:id/cancel` | PATCH | Cancel order |
-
-## Admin — Platform Management
-
-| Frontend Route / Component | Backend Endpoint | Method | Description |
-|---------------------------|------------------|--------|-------------|
-| `/dashboard/admin` — Dashboard | `/admin/dashboard` | GET | Platform-wide statistics |
-| `/dashboard/admin/users` — Users | `/admin/users` | GET | All users (paginated, searchable) |
-| Suspend user | `/admin/users/:id/suspend` | PATCH | Suspend a user |
-| Activate user | `/admin/users/:id/activate` | PATCH | Activate a suspended user |
-| Change user role | `/admin/users/:id/role` | PATCH | Change user's role |
-| `/dashboard/admin/gears` — Gear | `/gears` | GET | All gear listings |
-| Remove gear (admin) | `/admin/gears/:id` | DELETE | Soft-delete gear (sets isAvailable=false) |
-| `/dashboard/admin/rentals` | `/rentals/all` | GET | All rental orders (paginated) |
-| `/dashboard/admin/payments` | `/admin/payments` | GET | All payments (paginated) |
-
-## Stripe Webhook (Server-side)
-
-| Event | Backend Endpoint | Description |
-|-------|------------------|-------------|
-| `checkout.session.completed` | `POST /api/webhooks/stripe` | Updates rental to PAID, creates Payment record |
+**🌐 Base URL:** `https://gearup-backend-b7a4.onrender.com`
 
 ---
 
-## Auth Flow
+# 🔐 Authentication
 
-1. **Login**: Stores `accessToken` + `refreshToken` in localStorage and sets `accessToken` cookie
-2. **Middleware**: Reads `accessToken` cookie to protect routes, decodes JWT payload to check role
-3. **API calls**: Sends `Authorization: Bearer <accessToken>` header
-4. **Auto-refresh**: On 401 response, calls `/auth/refresh-token` and retries
+| Frontend | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| `/auth/login` | `/auth/login` | **POST** | Authenticate user and return access & refresh tokens |
+| `/auth/register` | `/users/register` | **POST** | Register a new Customer or Provider |
+| `/auth/forgot-password` | `/auth/forgot-password` | **POST** | Reset password (email + oldPassword + newPassword) |
+| Navbar Logout | `/auth/logout` | **POST** | Logout user and clear authentication |
+| `api.ts` Auto Refresh | `/auth/refresh-token` | **POST** | Refresh expired access token |
+| `AuthInitializer` / `useAuthStore` | `/users/me` | **GET** | Fetch authenticated user profile |
+| Profile Page | `/users/my-profile` | **PUT** | Update user profile (name, phone) |
+| Change Password | `/auth/change-password` | **PATCH** | Update account password |
+| Upload Profile Image | `/users/upload-image` | **POST** | Upload profile image using FormData |
 
-## Admin Credentials
+---
 
-- **Email**: `admin@gearup.com`
-- **Password**: `admin123`
+# 🏋️ Public — Gear Browsing
+
+| Frontend | Endpoint | Method | Query Parameters |
+|----------|----------|--------|------------------|
+| Homepage — Featured Gear | `/gears` | **GET** | `limit`, `page`, `sortBy`, `sortOrder` |
+| `/gear` — Browse & Filter | `/gears` | **GET** | `page`, `limit`, `search`, `categoryId`, `minPrice`, `maxPrice`, `sortBy`, `sortOrder` |
+| Categories Page | `/categories` | **GET** | — |
+| `/gear/[id]` — Gear Details | `/gears/:id` | **GET** | — |
+| `/gear/[id]` — Reviews | `/reviews/gear/:gearId` | **GET** | — |
+
+---
+
+# 👤 Customer — Rentals & Reviews
+
+| Frontend | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| `/dashboard/customer` | `/dashboard/customer` | **GET** | Customer dashboard statistics |
+| `/dashboard/customer/orders` | `/rentals/my-rentals` | **GET** | Customer rental history |
+| Gear Details → Rent Now | `/rentals` | **POST** | Create rental order |
+| Cancel Rental | `/rentals/:id/cancel` | **PATCH** | Cancel PLACED/CONFIRMED rental |
+| `/dashboard/customer/orders/:id/pay` | `/payments/checkout/:rentalId` | **POST** | Create Stripe Checkout Session |
+| `/dashboard/customer/reviews` | `/reviews/my-reviews` | **GET** | Customer reviews |
+| Create Review | `/reviews` | **POST** | Submit review after rental |
+| Edit Review | `/reviews/:id` | **PATCH** | Update own review |
+| Delete Review | `/reviews/:id` | **DELETE** | Remove own review |
+
+---
+
+# 🏪 Provider — Inventory & Order Management
+
+| Frontend | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| `/dashboard/provider` | `/dashboard/provider` | **GET** | Provider dashboard overview |
+| `/dashboard/provider/gear` | `/gears/my-gears` | **GET** | Provider gear inventory |
+| `/dashboard/provider/gear/new` | `/gears` | **POST** | Add new gear |
+| Edit Gear | `/gears/:id` | **PATCH** | Update existing gear |
+| Delete Gear | `/gears/:id` | **DELETE** | Delete owned gear |
+| Toggle Availability | `/gears/:id` | **PATCH** | Update availability status |
+| `/dashboard/provider/orders` | `/rentals/provider-orders` | **GET** | Provider incoming rental orders |
+| Confirm Order | `/rentals/:id/confirm` | **PATCH** | PLACED → CONFIRMED |
+| Mark Picked Up | `/rentals/:id/pickup` | **PATCH** | PAID → PICKED_UP |
+| Mark Returned | `/rentals/:id/return` | **PATCH** | PICKED_UP → RETURNED |
+| Cancel Order | `/rentals/:id/cancel` | **PATCH** | Cancel pending rental |
+| Provider Reviews | `/reviews/gear/:gearId` | **GET** | Reviews for provider's gear |
+
+---
+
+# 🛡️ Admin — Platform Management
+
+| Frontend | Endpoint | Method | Description |
+|----------|----------|--------|-------------|
+| `/dashboard/admin` | `/admin/dashboard` | **GET** | Platform statistics |
+| `/dashboard/admin/users` | `/admin/users` | **GET** | User management |
+| Suspend User | `/admin/users/:id/suspend` | **PATCH** | Suspend selected user |
+| Activate User | `/admin/users/:id/activate` | **PATCH** | Activate suspended user |
+| Change User Role | `/admin/users/:id/role` | **PATCH** | Update user role |
+| `/dashboard/admin/gears` | `/gears` | **GET** | All gear listings |
+| Delete Gear | `/admin/gears/:id` | **DELETE** | Remove gear listing |
+| Toggle Availability | `/gears/:id` | **PATCH** | Update gear availability |
+| `/dashboard/admin/rentals` | `/admin/rentals` | **GET** | Rental management |
+| `/dashboard/admin/payments` | `/admin/payments` | **GET** | Payment monitoring |
+| `/dashboard/admin/categories` | `/categories` | **GET** | Category management |
+| Create Category | `/categories` | **POST** | Create category |
+| Update Category | `/categories/:id` | **PATCH** | Update category |
+| Delete Category | `/categories/:id` | **DELETE** | Delete category |
+| `/dashboard/admin/reviews` | `/reviews` | **GET** | Review moderation |
+| Delete Review | `/reviews/:id` | **DELETE** | Remove any review |
+
+---
+
+# 💳 Stripe Payment (Server-side)
+
+| Event | Endpoint | Description |
+|-------|----------|-------------|
+| `checkout.session.completed` | `POST /webhooks/stripe` | Automatically marks rental as **PAID** and creates payment record |
+
+---
+
+# 🔄 Authentication Flow
+
+### 1️⃣ Login
+- `POST /auth/login`
+- Stores **accessToken** in Cookie + localStorage
+- Stores **refreshToken** in localStorage
+
+### 2️⃣ Middleware Protection
+- Reads `accessToken`
+- Decodes JWT
+- Verifies authenticated user role
+- Protects dashboard routes
+
+### 3️⃣ API Requests
+- Automatically sends:
+
+```http
+Authorization: Bearer <accessToken>
+```
+
+along with:
+
+```ts
+credentials: "include"
+```
+
+### 4️⃣ Auto Refresh
+- If an API returns **401 Unauthorized**
+- `api.ts` automatically calls:
+
+```http
+POST /auth/refresh-token
+```
+
+- Receives new tokens
+- Retries the original request automatically
+
+### 5️⃣ Logout
+- Clears localStorage tokens
+- Removes authentication cookie
+- Redirects user to the Home page
+
+---
+
+# 👨‍💼 Admin Credentials
+
+| Email | Password |
+|--------|----------|
+| **admin@gmail.com** | **admin123** |
