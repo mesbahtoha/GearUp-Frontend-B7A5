@@ -155,3 +155,13 @@ export interface IGearFilters {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
+
+// backward-compat aliases
+export type ApiResponse<T> = IApiResponse<T>;
+export type PaginatedResponse<T> = { success: boolean; statusCode: number; message: string; data: T[]; meta: IMeta };
+export type IRental = IRentalOrder;
+export type IGear = IGearItem;
+export type Meta = IMeta;
+export type IDashboardAdmin = IAdminDashboard;
+export type IDashboardCustomer = ICustomerDashboard;
+export type IDashboardProvider = IProviderDashboard;
