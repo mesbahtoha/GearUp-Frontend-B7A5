@@ -1,114 +1,280 @@
-# GearUp - Sports & Outdoor Gear Rental Platform
+# 🚀 GearUp - Sports & Outdoor Gear Rental Platform
 
-Rent sports & outdoor gear instantly. GearUp connects customers with equipment providers for seamless gear rental.
+GearUp is a modern full-stack Sports & Outdoor Gear Rental Platform built with **Next.js 16**, **TypeScript**, and **Tailwind CSS**. It enables customers to rent sports equipment, providers to manage inventory, and administrators to oversee the entire platform through role-based dashboards.
 
-## Tech Stack
+---
 
-- **Next.js 16** (App Router)
-- **TypeScript**
-- **Tailwind CSS v4**
-- **shadcn/ui** (base-ui components)
-- **TanStack Query** (data fetching)
-- **React Hook Form + Zod** (form validation)
-- **Sonner** (toast notifications)
-- **Stripe** (payment integration)
+# 🌐 Live Demo
 
-## Admin Credentials
+### Frontend
+https://gear-up-frontend-b7-a5.vercel.app
 
-- **Email:** admin@gmail.com
-- **Password:** admin123
+### Backend API
+https://gearup-backend-b7a4.onrender.com
 
-## Getting Started
+---
 
-### 1. Install dependencies
+# 🎥 Video Explanation
+
+> Video link will be added after recording.
+
+---
+
+# 👨‍💻 Admin Credentials
+
+| Email | Password |
+|--------|----------|
+| **admin@gmail.com** | **admin123** |
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
+- JWT Authentication (httpOnly Cookies)
+- Login & Registration
+- Role-based Authorization
+- Protected Routes using Next.js Middleware
+- Automatic Access Token Refresh
+- Change Password
+- Profile Management
+
+---
+
+## 🌍 Public Features
+
+- Featured Gear Homepage
+- Gear Listing
+- Search
+- Category Filtering
+- Availability Filtering
+- Price Filtering
+- Pagination
+- Gear Details
+- Provider Information
+- Responsive UI
+
+---
+
+## 👤 Customer Features
+
+- Customer Dashboard
+- Rental History
+- Rental Status Tracking
+- Stripe Checkout Integration
+- Payment Success & Cancel Pages
+- Review Management
+- Profile Update
+- Change Password
+
+---
+
+## 🏪 Provider Features
+
+- Provider Dashboard
+- Gear CRUD
+- Inventory Management
+- Rental Order Management
+- Confirm Orders
+- Mark Picked Up
+- Mark Returned
+- Profile Management
+
+---
+
+## 🛡 Admin Features
+
+- Admin Dashboard
+- Platform Statistics
+- User Management
+- Suspend / Activate Users
+- Change User Role
+- Rental Management
+- Payment Monitoring
+
+---
+
+# 🛠 Tech Stack
+
+## Frontend
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Base UI (shadcn/ui)
+- TanStack Query
+- React Hook Form
+- Zod
+- Sonner
+
+## Backend
+
+- Node.js
+- Express.js
+- TypeScript
+- Prisma ORM
+- PostgreSQL (Neon)
+- JWT Authentication
+- Stripe
+
+---
+
+# 📦 Project Structure
+
+```text
+src/
+├── actions/
+├── app/
+│   ├── (auth)
+│   ├── (public)
+│   ├── dashboard
+│   └── payment
+├── components/
+├── constants/
+├── context/
+├── hooks/
+├── providers/
+├── schemas/
+├── services/
+├── types/
+└── middleware.ts
+```
+
+---
+
+# ⚙️ Environment Variables
+
+Create a `.env.local` file.
+
+```env
+NEXT_PUBLIC_API_URL=https://gearup-backend-b7a4.onrender.com
+```
+
+---
+
+# 🚀 Getting Started
+
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Set up environment variables
-
-Create `.env.local`:
-
-```env
-NEXT_PUBLIC_API_URL=https://gearup-backend-b7a4.onrender.com/api
-```
-
-### 3. Run development server
+## Run Development Server
 
 ```bash
 npm run dev
 ```
 
-### 4. Build for production
+## Build
 
 ```bash
 npm run build
 ```
 
-### 5. Start production server
+## Start Production
 
 ```bash
 npm start
 ```
 
-## Project Structure
+---
 
-```
-src/
-├── actions/          # Server actions
-├── app/              # Next.js App Router pages
-│   ├── (auth)/       # Login, Register
-│   ├── (public)/     # Home, Gear listing, Gear details
-│   ├── dashboard/    # Customer, Provider, Admin dashboards
-│   └── payment/      # Success & Cancel pages
-├── components/
-│   ├── layouts/      # Navbar, Footer, DashboardSidebar
-│   ├── modules/      # Feature-specific components
-│   ├── shared/       # Container, Loading, Empty, Error states
-│   └── ui/           # shadcn/ui components
-├── constants/        # Routes, Roles
-├── context/          # AuthContext
-├── hooks/            # Custom hooks
-├── lib/              # Utilities, fetch wrapper
-├── providers/        # React providers (Query, Auth)
-├── schemas/          # Zod validation schemas
-├── services/         # API service layer
-├── types/            # TypeScript types
-└── middleware.ts     # Route protection
+# 💳 Payment
+
+GearUp uses **Stripe Checkout** for secure online payments.
+
+Stripe Test Card:
+
+```text
+Card Number : 4242 4242 4242 4242
+Expiry Date : Any future date
+CVV         : Any 3 digits
+ZIP Code    : Any valid ZIP
 ```
 
-## Features
+---
 
-### Public
-- Home page with featured gears
-- Gear listing with search, category filter, price filter
-- Gear details with image gallery and rental form
+# 📚 API Documentation
 
-### Customer
-- Dashboard with stats
-- Rental history with payment
-- Review management
-- Profile management
-- Stripe checkout integration
+See:
 
-### Provider
-- Dashboard with stats
-- Inventory management (CRUD)
-- Order management (confirm, pickup, return, cancel)
-- Profile management
+```
+API_INTEGRATION.md
+```
 
-### Admin
-- Dashboard with platform stats
-- User management (suspend, activate, role change)
-- Rental management
-- Payment management
+for complete frontend ↔ backend endpoint mapping.
 
-## API Documentation
+---
 
-See [API_INTEGRATION.md](./API_INTEGRATION.md) for complete API endpoint mapping.
+# 🌐 Backend
 
-## Backend
+Repository:
 
-Backend repository: GearUp - Backend
-Live API: https://gearup-backend-b7a4.onrender.com/api
+https://github.com/mesbahtoha/GearUp-Backend-B7A4
+
+API:
+
+https://gearup-backend-b7a4.onrender.com
+
+---
+
+# 🚀 Deployment
+
+Frontend
+
+- Vercel
+
+Backend
+
+- Render
+
+Database
+
+- Neon PostgreSQL
+
+---
+
+# 📋 Assignment Checklist
+
+✅ Next.js App Router
+
+✅ TypeScript
+
+✅ Tailwind CSS v4
+
+✅ Base UI Components
+
+✅ TanStack Query
+
+✅ React Hook Form + Zod
+
+✅ JWT Authentication
+
+✅ Role-based Middleware
+
+✅ Stripe Payment Integration
+
+✅ Responsive Design
+
+✅ Dashboard for Customer, Provider & Admin
+
+✅ CRUD Operations
+
+✅ Search, Filter & Pagination
+
+✅ Profile Management
+
+✅ Toast Notifications
+
+✅ Loading Skeletons
+
+✅ Error Handling
+
+---
+
+# 👨‍💻 Author
+
+**Md. Mesbahul Alam**
