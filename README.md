@@ -1,20 +1,27 @@
-# GearUp - Sports & Outdoor Gear Rental Platform
+# 🏋️ GearUp - Sports & Outdoor Gear Rental Platform
 
 GearUp is a full-stack Sports & Outdoor Gear Rental Platform built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. It enables customers to rent sports equipment, providers to manage inventory, and administrators to oversee the entire platform through role-based dashboards.
 
 ---
 
-## Live Demo
+# 🌐 Live Demo
 
-### Frontend
+## 🚀 Frontend
 https://gear-up-frontend-b7-a5.vercel.app
 
-### Backend API
+## ⚙️ Backend API
 https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Admin Credentials
+# 🎥 Video Explanation
+
+> **Demo Video:**  
+> *(Add your Google Drive / Loom video link here)*
+
+---
+
+# 👨‍💼 Admin Credentials
 
 | Email | Password |
 |--------|----------|
@@ -22,9 +29,9 @@ https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Features
+# ✨ Features
 
-### Authentication
+## 🔐 Authentication
 
 - JWT Authentication (httpOnly Cookie + localStorage)
 - Login & Registration
@@ -34,7 +41,7 @@ https://gearup-backend-b7a4.onrender.com
 - Change Password
 - Profile Management (name, phone, profile image)
 
-### Public Features
+## 🌍 Public Features
 
 - Featured Gear Homepage
 - Gear Listing with Search
@@ -47,7 +54,7 @@ https://gearup-backend-b7a4.onrender.com
 - Reviews on Gear Details
 - Responsive UI
 
-### Customer Features
+## 👤 Customer Features
 
 - Customer Dashboard (stats: orders, active, returned, cancelled, spent)
 - Rental History with Status Filtering
@@ -59,7 +66,7 @@ https://gearup-backend-b7a4.onrender.com
 - Profile Update (name, phone, profile image)
 - Change Password
 
-### Provider Features
+## 🏪 Provider Features
 
 - Provider Dashboard (stats: gear, rentals, orders, revenue)
 - Gear CRUD (create, read, update, delete)
@@ -74,7 +81,7 @@ https://gearup-backend-b7a4.onrender.com
 - Review Visibility
 - Profile Management
 
-### Admin Features
+## 🛡️ Admin Features
 
 - Admin Dashboard (platform-wide statistics)
 - User Management (list, search, filter by role/status)
@@ -88,9 +95,9 @@ https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Tech Stack
+# 🛠️ Tech Stack
 
-### Frontend
+## 🎨 Frontend
 
 - **Next.js 15** (App Router)
 - **React 19**
@@ -108,7 +115,7 @@ https://gearup-backend-b7a4.onrender.com
 - **jose** (JWT parsing)
 - **class-variance-authority** + **tailwind-merge** (component styling)
 
-### Backend
+## ⚙️ Backend
 
 - Node.js + Express.js
 - TypeScript
@@ -120,9 +127,9 @@ https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Project Structure
+# 📁 Project Structure
 
-```
+```text
 src/
 ├── actions/              # Server actions (getAccessToken, removeAccessToken)
 ├── app/                  # Next.js App Router pages & layouts
@@ -159,7 +166,7 @@ src/
 
 ---
 
-## Environment Variables
+# ⚙️ Environment Variables
 
 Create `.env.local`:
 
@@ -171,27 +178,27 @@ NEXT_PUBLIC_APP_URL=https://your-vercel-url.vercel.app
 
 ---
 
-## Getting Started
+# 🚀 Getting Started
 
-### Install Dependencies
+## 📦 Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Run Development Server
+## ▶️ Run Development Server
 
 ```bash
 npm run dev
 ```
 
-### Build for Production
+## 🏗️ Build for Production
 
 ```bash
 npm run build
 ```
 
-### Start Production Server
+## 🚀 Start Production Server
 
 ```bash
 npm start
@@ -199,13 +206,13 @@ npm start
 
 ---
 
-## Payment
+# 💳 Payment
 
 GearUp uses **Stripe Checkout** for secure online payments.
 
 **Stripe Test Card:**
 
-```
+```text
 Card Number : 4242 4242 4242 4242
 Expiry Date : Any future date
 CVV         : Any 3 digits
@@ -214,7 +221,7 @@ ZIP Code    : Any valid ZIP
 
 ---
 
-## Role-Based Routing
+# 🔒 Role-Based Routing
 
 | Role | Dashboard | Prefix |
 |------|-----------|--------|
@@ -226,20 +233,20 @@ Next.js Middleware protects all private routes based on the authenticated user's
 
 ---
 
-## API Documentation
+# 📚 API Documentation
 
 See [API_INTEGRATION.md](./API_INTEGRATION.md) for complete frontend ↔ backend endpoint mapping.
 
 ---
 
-## Backend
+# 🔗 Backend
 
 - **Repository**: https://github.com/mesbahtoha/GearUp-Backend-B7A4
 - **Live API**: https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Deployment
+# ☁️ Deployment
 
 - **Frontend**: Vercel
 - **Backend**: Render
@@ -247,6 +254,6 @@ See [API_INTEGRATION.md](./API_INTEGRATION.md) for complete frontend ↔ backend
 
 ---
 
-## Author
+# 👨‍💻 Author
 
 **Md. Mesbahul Alam**
