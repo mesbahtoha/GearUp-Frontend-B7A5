@@ -5,27 +5,36 @@ interface SkeletonProps {
 }
 
 export function Skeleton({ className }: SkeletonProps) {
-  return <div className={cn("animate-pulse bg-gray-200 rounded", className)} />;
+  return (
+    <div className={cn("animate-pulse rounded-md bg-gray-200", className)} />
+  );
+}
+
+interface TableSkeletonProps {
+  rows?: number;
+}
+
+export function TableSkeleton({ rows = 5 }: TableSkeletonProps) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex gap-4">
+          <Skeleton className="h-4 flex-1" />
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export function GearCardSkeleton() {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-      <Skeleton className="h-48 w-full rounded-lg" />
-      <Skeleton className="h-5 w-3/4" />
+      <Skeleton className="h-40 w-full rounded-lg" />
+      <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
-      <Skeleton className="h-4 w-1/3" />
-      <Skeleton className="h-10 w-full" />
-    </div>
-  );
-}
-
-export function TableSkeleton({ rows = 5 }: { rows?: number }) {
-  return (
-    <div className="space-y-3">
-      {Array.from({ length: rows }).map((_, i) => (
-        <Skeleton key={i} className="h-12 w-full" />
-      ))}
+      <Skeleton className="h-4 w-1/4" />
     </div>
   );
 }
