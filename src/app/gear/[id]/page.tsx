@@ -22,7 +22,7 @@ export default function GearDetailPage() {
   const { isAuthenticated, user } = useAuthStore();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<string>("1");
   const [creating, setCreating] = useState(false);
 
   const { data: gearRes, isLoading } = useQuery({
@@ -63,7 +63,7 @@ export default function GearDetailPage() {
         gearId: id,
         startDate,
         endDate,
-        quantity,
+        quantity: Number(quantity),
       });
       if (res.success) {
         toast.success("Rental order placed! Provider will confirm it.");
@@ -100,7 +100,7 @@ export default function GearDetailPage() {
 
   const today = new Date().toISOString().split("T")[0];
   const days = startDate && endDate ? Math.max(1, Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))) : 0;
-  const totalPrice = days * gear.pricePerDay * quantity;
+  const totalPrice = days * gear.pricePerDay * Number(quantity);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -146,25 +146,25 @@ export default function GearDetailPage() {
           {gear.isAvailable && (
             <Card className="p-4 space-y-3">
               <h3 className="font-semibold">Rent Now</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="min-w-0">
                   <label className="block text-xs font-medium text-gray-700 mb-1">Start Date</label>
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     min={today}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <label className="block text-xs font-medium text-gray-700 mb-1">End Date</label>
                   <input
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     min={startDate || today}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="w-full min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
               </div>
@@ -175,14 +175,29 @@ export default function GearDetailPage() {
                   min={1}
                   max={gear.stock}
                   value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, Math.min(gear.stock, Number(e.target.value))))}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "") {
+                      setQuantity("");
+                      return;
+                    }
+                    const num = Number(value);
+                    if (Number.isNaN(num)) return;
+                    setQuantity(String(Math.min(gear.stock, num)));
+                  }}
+                  onBlur={() => {
+                    const num = Number(quantity);
+                    if (quantity === "" || Number.isNaN(num) || num < 1) {
+                      setQuantity("1");
+                    }
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                 />
               </div>
               {days > 0 && (
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">
-                    {days} day{days > 1 ? "s" : ""} &times; {quantity} unit{quantity > 1 ? "s" : ""}
+                    {days} day{days > 1 ? "s" : ""} &times; {Number(quantity) || 0} unit{Number(quantity) > 1 ? "s" : ""}
                   </span>
                   <span className="font-bold">{formatPrice(totalPrice)}</span>
                 </div>
