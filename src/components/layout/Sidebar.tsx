@@ -17,13 +17,16 @@ import {
   LogOut,
   PlusCircle,
   List,
+  Compass,
 } from "lucide-react";
 import { logoutUser } from "@/lib/auth";
 import Button from "@/components/ui/Button";
 
+const browseLink = { href: "/gear", label: "Browse Gear", icon: Compass };
 const profileLink = { href: "/dashboard/profile", label: "Profile", icon: User };
 
 const customerLinks = [
+  browseLink,
   profileLink,
   { href: "/dashboard/customer", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/customer/orders", label: "My Orders", icon: ShoppingBag },
@@ -31,6 +34,7 @@ const customerLinks = [
 ];
 
 const providerLinks = [
+  browseLink,
   profileLink,
   { href: "/dashboard/provider", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/provider/gear", label: "My Gear", icon: Package },
@@ -40,6 +44,7 @@ const providerLinks = [
 ];
 
 const adminLinks = [
+  browseLink,
   profileLink,
   { href: "/dashboard/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/admin/users", label: "Users", icon: Users },

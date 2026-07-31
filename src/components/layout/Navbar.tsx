@@ -100,16 +100,6 @@ export default function Navbar() {
           </Link>
           {isAuthenticated ? (
             <>
-              <Link href="/dashboard/profile" className="flex items-center gap-2 py-2" onClick={() => setMobileOpen(false)}>
-                <Image
-                  src={user?.image || getGravatarUrl(user?.email || "", 24)}
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 rounded-full ring-2 ring-gray-200 object-cover"
-                />
-                <span className="text-sm font-medium">{user?.name}</span>
-              </Link>
               <Link href={dashboardLink} className="block text-sm py-2" onClick={() => setMobileOpen(false)}>
                 Dashboard
               </Link>

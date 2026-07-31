@@ -96,9 +96,9 @@ function GearContent() {
         </div>
       </div>
 
-      <div className="flex gap-6">
-        <aside className={`${showFilters ? "block" : "hidden"} lg:block w-64 shrink-0`}>
-          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-4 sticky top-20">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <aside className={`${showFilters ? "block" : "hidden"} lg:block w-full lg:w-64 shrink-0`}>
+          <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-4 lg:sticky lg:top-20">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
               <div className="relative">
