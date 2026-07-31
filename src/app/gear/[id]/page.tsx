@@ -154,7 +154,7 @@ export default function GearDetailPage() {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     min={today}
-                    className="w-full min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="block w-full min-w-0 max-w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
                 <div className="min-w-0">
@@ -164,7 +164,7 @@ export default function GearDetailPage() {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     min={startDate || today}
-                    className="w-full min-w-0 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                    className="block w-full min-w-0 max-w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   />
                 </div>
               </div>
@@ -183,7 +183,7 @@ export default function GearDetailPage() {
                     }
                     const num = Number(value);
                     if (Number.isNaN(num)) return;
-                    setQuantity(String(Math.min(gear.stock, num)));
+                    setQuantity(String(Math.min(gear.stock, Math.max(1, num))));
                   }}
                   onBlur={() => {
                     const num = Number(quantity);
