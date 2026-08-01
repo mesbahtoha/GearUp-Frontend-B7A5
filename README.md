@@ -17,7 +17,7 @@ https://gearup-backend-b7a4.onrender.com
 # 🎥 Video Explanation
 
 > **Demo Video:**  
-> *(Add your Google Drive / Loom video link here)*
+> *https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drivesdk*
 
 ---
 
