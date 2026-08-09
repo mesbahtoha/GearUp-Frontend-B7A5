@@ -23,37 +23,35 @@ function parseJwt(token: string): JwtPayload | null {
 const customerRoutes = ["/dashboard/customer"];
 const providerRoutes = ["/dashboard/provider"];
 const adminRoutes = ["/dashboard/admin"];
-const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
 const protectedRoutes = ["/dashboard", "/payment-success", "/payment-cancel"];
+
+function isTokenValid(token: string): boolean {
+  const payload = parseJwt(token);
+  if (!payload) return false;
+  if (payload.exp && payload.exp * 1000 < Date.now()) return false;
+  return true;
+}
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("accessToken")?.value;
+  const validToken = !!token && isTokenValid(token);
+  const payload = validToken && token ? parseJwt(token) : null;
 
-  if (authRoutes.some((route) => pathname.startsWith(route)) && token) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  if (protectedRoutes.some((route) => pathname.startsWith(route)) && !token) {
+  // Auth pages (login/register) are always reachable so users can
+  // switch accounts (e.g. sign in with a different Google account).
+  if (protectedRoutes.some((route) => pathname.startsWith(route)) && !validToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (token) {
-    const payload = parseJwt(token);
-    if (!payload) {
-      if (protectedRoutes.some((route) => pathname.startsWith(route))) {
-        return NextResponse.redirect(new URL("/auth/login", request.url));
-      }
-      return NextResponse.next();
-    }
-
-    if (customerRoutes.some((route) => pathname.startsWith(route)) && payload.role !== "CUSTOMER") {
+  if (validToken) {
+    if (customerRoutes.some((route) => pathname.startsWith(route)) && payload!.role !== "CUSTOMER") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (providerRoutes.some((route) => pathname.startsWith(route)) && payload.role !== "PROVIDER") {
+    if (providerRoutes.some((route) => pathname.startsWith(route)) && payload!.role !== "PROVIDER") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (adminRoutes.some((route) => pathname.startsWith(route)) && payload.role !== "ADMIN") {
+    if (adminRoutes.some((route) => pathname.startsWith(route)) && payload!.role !== "ADMIN") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

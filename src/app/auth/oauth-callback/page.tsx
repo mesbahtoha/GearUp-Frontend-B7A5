@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { setAccessToken } from "@/lib/api";
+import { setAccessToken, clearTokens } from "@/lib/api";
 import { getMyProfile } from "@/lib/auth";
 import { useAuthStore } from "@/store/authStore";
 
@@ -21,6 +21,10 @@ export default function OAuthCallbackPage() {
       return;
     }
 
+    // Drop any previous session (stale tokens, old user state) before applying
+    // the freshly issued Google login tokens.
+    clearTokens();
+    setUser(null);
     setAccessToken(accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     document.cookie = `accessToken=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
