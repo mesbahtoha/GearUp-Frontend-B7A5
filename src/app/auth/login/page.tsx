@@ -92,14 +92,7 @@ export default function LoginPage() {
           <p className="text-gray-500 dark:text-gray-400 text-sm">Sign in to your GearUp account</p>
         </div>
 
-        <div className="relative my-5">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200 dark:border-slate-700" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-gray-50 dark:bg-slate-950 px-3 text-xs text-gray-400 uppercase tracking-wider">or</span>
-          </div>
-        </div>
+       
 
         <button
           type="button"
@@ -115,6 +108,15 @@ export default function LoginPage() {
           </svg>
           {googleLoading ? "Redirecting to Google..." : "Continue with Google"}
         </button>
+
+         <div className="relative my-5">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200 dark:border-slate-700" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-gray-50 dark:bg-slate-950 px-3 text-xs text-gray-400 uppercase tracking-wider">or</span>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
           <Input
