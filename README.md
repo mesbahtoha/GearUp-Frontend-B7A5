@@ -23,16 +23,11 @@ https://gearup-backend-b7a4.onrender.com
 
 ## Demo Credentials
 
-<<<<<<< HEAD
-> **Demo Video:**  
-> *https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drivesdk*
-=======
 | Role | Email | Password |
 |------|-------|----------|
-| **Admin** | admin@gearup.com | admin123 |
-| **Provider** | provider@gearup.com | provider123 |
-| **Customer** | customer@gearup.com | customer123 |
->>>>>>> 26108a2 (feat: dark mode, dashboard charts, new pages, and UI overhaul)
+| **Customer** | toha@gmail.com | toha123 |
+| **Provider** | provider@gmail.com | provider123 |
+| **Admin** | admin@gmail.com | admin123 |
 
 ---
 

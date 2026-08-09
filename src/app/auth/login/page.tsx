@@ -23,9 +23,9 @@ const loginSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 
 const demoAccounts = [
-  { label: "Customer", email: "customer@gearup.com", password: "customer123" },
-  { label: "Provider", email: "provider@gearup.com", password: "provider123" },
-  { label: "Admin", email: "admin@gearup.com", password: "admin123" },
+  { label: "Customer", email: "toha@gmail.com", password: "toha123" },
+  { label: "Provider", email: "provider@gmail.com", password: "provider123" },
+  { label: "Admin", email: "admin@gmail.com", password: "admin123" },
 ];
 
 export default function LoginPage() {
