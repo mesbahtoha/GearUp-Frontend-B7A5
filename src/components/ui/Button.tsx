@@ -9,9 +9,9 @@ export const buttonVariants = cva(
       variant: {
         default: "bg-primary-600 text-white hover:bg-primary-700",
         primary: "bg-primary-600 text-white hover:bg-primary-700",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-        outline: "border border-gray-300 text-gray-700 hover:bg-gray-50",
-        ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-100 dark:hover:bg-slate-700",
+        outline: "border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-slate-700 dark:text-gray-200 dark:hover:bg-slate-800",
+        ghost: "text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-slate-800",
         danger: "bg-red-600 text-white hover:bg-red-700",
       },
       size: {

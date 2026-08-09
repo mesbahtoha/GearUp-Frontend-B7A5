@@ -1,10 +1,19 @@
 import { apiFetch } from "./api";
 import type { IApiResponse, IRental, IPayment, PaginatedResponse, Meta } from "@/types";
 
+type RentalsApiResponse = IApiResponse<{
+  data: IRental[];
+  meta: Meta;
+}>;
+type PaymentsApiResponse = IApiResponse<{
+  data: IPayment[];
+  meta: Meta;
+}>;
+
 export const adminService = {
   async getRentals(params?: Record<string, string>) {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    const raw = await apiFetch<any>(`/admin/rentals${query}`);
+    const raw = await apiFetch<RentalsApiResponse>(`/admin/rentals${query}`);
     return {
       success: raw.success,
       statusCode: raw.statusCode,
@@ -16,7 +25,7 @@ export const adminService = {
 
   async getPayments(params?: Record<string, string>) {
     const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    const raw = await apiFetch<any>(`/admin/payments${query}`);
+    const raw = await apiFetch<PaymentsApiResponse>(`/admin/payments${query}`);
     return {
       success: raw.success,
       statusCode: raw.statusCode,

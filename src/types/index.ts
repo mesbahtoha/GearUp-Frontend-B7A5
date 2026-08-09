@@ -137,6 +137,14 @@ export interface IAdminDashboard {
   totalRevenue: number;
 }
 
+export interface IAnalytics {
+  rentalStatusBreakdown: { status: string; count: number }[];
+  userRoleBreakdown: { role: string; count: number }[];
+  gearByCategory: { category: string; count: number }[];
+  monthlyRevenue: { month: string; revenue: number }[];
+  monthlyRentalCount: { month: string; count: number }[];
+}
+
 export interface IUserFilters {
   page?: number;
   limit?: number;

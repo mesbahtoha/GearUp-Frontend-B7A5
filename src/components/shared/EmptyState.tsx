@@ -1,5 +1,5 @@
 import { PackageOpen } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/Button";
+import { buttonVariants } from "@/components/ui/Button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 

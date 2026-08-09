@@ -12,7 +12,7 @@ import Button from "@/components/ui/Button";
 import RefreshButton from "@/components/ui/RefreshButton";
 import { GearCardSkeleton } from "@/components/ui/Skeleton";
 import { formatPrice } from "@/lib/utils";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, SlidersHorizontal, X, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { Suspense } from "react";
 
@@ -189,37 +189,45 @@ function GearContent() {
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 {gears.map((gear) => (
-                  <Link key={gear.id} href={`/gear/${gear.id}`}>
-                    <Card hover className="overflow-hidden h-full">
-                      <div className="relative h-48 bg-gray-100">
-                        {gear.image ? (
-                          <Image src={gear.image} alt={gear.name} fill className="object-cover" />
-                        ) : (
-                          <div className="flex items-center justify-center h-full text-gray-300 text-sm">
-                            No Image
-                          </div>
-                        )}
-                      </div>
-                      <div className="p-4 space-y-2">
-                        <div className="flex items-start justify-between">
-                          <h3 className="font-semibold text-gray-900 truncate">{gear.name}</h3>
-                          <Badge status={gear.isAvailable ? "In Stock" : "Out of Stock"} />
+                  <Card key={gear.id} hover className="overflow-hidden h-full flex flex-col">
+                    <Link href={`/gear/${gear.id}`} className="relative h-48 bg-gray-100 dark:bg-slate-800 block">
+                      {gear.image ? (
+                        <Image src={gear.image} alt={gear.name} fill className="object-cover" />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-300 dark:text-gray-600 text-sm">
+                          No Image
                         </div>
-                        <p className="text-sm text-gray-500 truncate">{gear.brand}</p>
-                        {gear.category && (
-                          <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
-                            {gear.category.name}
-                          </span>
-                        )}
-                        <div className="flex items-center justify-between pt-2">
-                          <span className="text-lg font-bold text-primary-600">
-                            {formatPrice(gear.pricePerDay)}
-                            <span className="text-xs text-gray-500 font-normal">/day</span>
-                          </span>
-                        </div>
+                      )}
+                    </Link>
+                    <div className="p-4 space-y-2 flex flex-col flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <Link href={`/gear/${gear.id}`}>
+                          <h3 className="font-semibold truncate hover:text-primary-600 dark:hover:text-primary-400">{gear.name}</h3>
+                        </Link>
+                        <Badge status={gear.isAvailable ? "In Stock" : "Out of Stock"} />
                       </div>
-                    </Card>
-                  </Link>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{gear.description}</p>
+                      {gear.category && (
+                        <span className="inline-block px-2 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 text-xs rounded w-fit">
+                          {gear.category.name}
+                        </span>
+                      )}
+                      <div className="flex items-center justify-between pt-1 mt-auto">
+                        <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                          {formatPrice(gear.pricePerDay)}
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-normal">/day</span>
+                        </span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                          Brand: {gear.brand}
+                        </span>
+                      </div>
+                      <Link href={`/gear/${gear.id}`} className="pt-2">
+                        <Button size="sm" variant="outline" className="w-full">
+                          View Details <ArrowRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
                 ))}
               </div>
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { IApiResponse, IRentalOrder } from "@/types";
-import Card from "@/components/ui/Card";
+// import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import RefreshButton from "@/components/ui/RefreshButton";

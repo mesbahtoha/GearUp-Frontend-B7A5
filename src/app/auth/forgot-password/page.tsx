@@ -48,8 +48,9 @@ export default function ForgotPasswordPage() {
         toast.success(res.message || "Password reset successfully");
         router.push("/auth/login");
       }
-    } catch (e: any) {
-      toast.error(e?.message || "Something went wrong");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Something went wrong";
+      toast.error(message);
     } finally {
       setLoading(false);
     }

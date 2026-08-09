@@ -1,62 +1,67 @@
-# 🏋️ GearUp - Sports & Outdoor Gear Rental Platform
+# GearUp - Sports & Outdoor Gear Rental Platform
 
 GearUp is a full-stack Sports & Outdoor Gear Rental Platform built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. It enables customers to rent sports equipment, providers to manage inventory, and administrators to oversee the entire platform through role-based dashboards.
 
 ---
 
-# 🌐 Live Demo
+## Live Demo
 
-## 🚀 Frontend
+### Frontend
 https://gear-up-frontend-b7-a5.vercel.app
 
-## ⚙️ Backend API
+### Backend API
 https://gearup-backend-b7a4.onrender.com
 
 ---
 
-# 🎥 Video Explanation
+## Video Explanation
 
+> **Demo Video:**
+> https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drivesdk
+
+---
+
+## Demo Credentials
+
+<<<<<<< HEAD
 > **Demo Video:**  
 > *https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drivesdk*
+=======
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | admin@gearup.com | admin123 |
+| **Provider** | provider@gearup.com | provider123 |
+| **Customer** | customer@gearup.com | customer123 |
+>>>>>>> 26108a2 (feat: dark mode, dashboard charts, new pages, and UI overhaul)
 
 ---
 
-# 👨‍💼 Admin Credentials
+## Features
 
-| Email | Password |
-|--------|----------|
-| **admin@gmail.com** | **admin123** |
-
----
-
-# ✨ Features
-
-## 🔐 Authentication
-
+### Authentication
 - JWT Authentication (httpOnly Cookie + localStorage)
 - Login & Registration
+- **Social Login (Google OAuth)**
 - Role-based Authorization
 - Protected Routes via Next.js Middleware
 - Automatic Access Token Refresh (401 retry)
 - Change Password
 - Profile Management (name, phone, profile image)
+- One-click Demo Login buttons on the Login page
 
-## 🌍 Public Features
-
-- Featured Gear Homepage
-- Gear Listing with Search
-- Category Filtering
-- Price Range Filtering
-- Sorting (price, date, name)
-- Pagination
-- Gear Details Page
+### Public Features
+- Hero Slider Homepage
+- Featured Gear, Categories, Statistics, Testimonials & FAQ sections
+- Newsletter Signup Form
+- Gear Listing with Search, Category & Price Filtering, Sorting, Pagination
+- Gear Details Page with Related Gear, Rating Summary & Reviews
 - Category Browser
-- Reviews on Gear Details
+- Static pages: **About, Contact, Blog, Help, Privacy, Terms**
+- **Dark Mode** (theme toggle, persists across sessions)
 - Responsive UI
 
-## 👤 Customer Features
-
-- Customer Dashboard (stats: orders, active, returned, cancelled, spent)
+### Customer Features
+- Customer Dashboard (stats: orders, active, returned, cancelled, spent) + **order status chart**
 - Rental History with Status Filtering
 - Rental Status Tracking (PLACED → CONFIRMED → PAID → PICKED_UP → RETURNED)
 - Cancel Orders
@@ -66,9 +71,8 @@ https://gearup-backend-b7a4.onrender.com
 - Profile Update (name, phone, profile image)
 - Change Password
 
-## 🏪 Provider Features
-
-- Provider Dashboard (stats: gear, rentals, orders, revenue)
+### Provider Features
+- Provider Dashboard (stats: gear, rentals, orders, revenue) + **order status chart**
 - Gear CRUD (create, read, update, delete)
 - Image Upload for Gear
 - Availability Toggle
@@ -81,9 +85,8 @@ https://gearup-backend-b7a4.onrender.com
 - Review Visibility
 - Profile Management
 
-## 🛡️ Admin Features
-
-- Admin Dashboard (platform-wide statistics)
+### Admin Features
+- Admin Dashboard (platform-wide statistics) + **analytics charts** (monthly revenue, rentals per month, rentals by status, gear by category)
 - User Management (list, search, filter by role/status)
 - Suspend / Activate Users
 - Change User Role
@@ -95,10 +98,9 @@ https://gearup-backend-b7a4.onrender.com
 
 ---
 
-# 🛠️ Tech Stack
+## Tech Stack
 
-## 🎨 Frontend
-
+### Frontend
 - **Next.js 15** (App Router)
 - **React 19**
 - **TypeScript**
@@ -107,6 +109,8 @@ https://gearup-backend-b7a4.onrender.com
 - **TanStack Query** (data fetching & caching)
 - **React Hook Form** + **Zod** (form validation)
 - **Zustand** (auth state management)
+- **next-themes** (dark mode)
+- **Recharts** (dashboard charts)
 - **react-hot-toast** (toast notifications)
 - **Stripe** (payment integration)
 - **Lucide React** (icons)
@@ -115,47 +119,50 @@ https://gearup-backend-b7a4.onrender.com
 - **jose** (JWT parsing)
 - **class-variance-authority** + **tailwind-merge** (component styling)
 
-## ⚙️ Backend
-
+### Backend
 - Node.js + Express.js
 - TypeScript
-- Prisma ORM
-- PostgreSQL (Neon)
+- Prisma ORM (PostgreSQL / Neon)
 - JWT Authentication
+- **Zod validation middleware**
+- **Google OAuth 2.0**
 - Stripe Payment
 - Image Upload
 
 ---
 
-# 📁 Project Structure
+## Project Structure
 
 ```text
 src/
 ├── actions/              # Server actions (getAccessToken, removeAccessToken)
 ├── app/                  # Next.js App Router pages & layouts
 │   ├── auth/             # Login, Register, Forgot Password
+│   ├── about/            # About page
+│   ├── blog/             # Blog listing & post details
 │   ├── categories/       # Category browser
+│   ├── contact/          # Contact page (form)
 │   ├── dashboard/        # Role-based dashboards
 │   │   ├── admin/        # Users, Gears, Rentals, Payments, Categories, Reviews
 │   │   ├── customer/     # Orders (with payment), Reviews
 │   │   ├── provider/     # Gear (CRUD), Orders, Reviews
 │   │   └── profile/      # Profile & password management
 │   ├── gear/             # Gear listing & details
+│   ├── help/             # Help/FAQ page
+│   ├── privacy/          # Privacy policy
+│   ├── terms/            # Terms of service
 │   ├── payment/          # Payment success & cancel pages
-│   ├── payment-success/  # Stripe success callback
-│   ├── payment-cancel/   # Stripe cancel callback
-│   ├── layout.tsx        # Root layout (Navbar, Footer)
-│   ├── page.tsx          # Home page (Hero, Features, Categories, Featured Gear)
-│   └── providers.tsx     # TanStack Query + Auth Initializer + Toaster
+│   ├── layout.tsx        # Root layout (Navbar, Footer, ThemeProvider)
+│   └── page.tsx          # Home page (Hero slider, Features, Stats, FAQ, Newsletter)
 ├── components/
 │   ├── layout/           # Navbar, Footer, Dashboard Sidebar
-│   ├── shared/           # Container, LoadingSpinner, ErrorState, EmptyState
-│   └── ui/               # Button, Card, Input, Badge, Select, Skeleton, RefreshButton
-├── constants/            # BASE_URL, USER_ROLE enum, ROUTES
+│   ├── shared/           # Container, LoadingSpinner, ErrorState, EmptyState, Charts
+│   └── ui/               # Button, Card, Input, Badge, Select, Textarea, Skeleton, ThemeToggle
+├── constants/            # BASE_URL, USER_ROLE enum, ROUTES, blog posts
 ├── context/              # AuthContext (login, register, logout, refreshUser, etc.)
 ├── hooks/                # useAuth, useGear, useRental, useInitializeAuth
 ├── lib/                  # api client, auth helpers, fetch wrapper, utils, gravatar, queryCache
-├── providers/            # QueryProvider
+├── providers/            # QueryProvider, ThemeProvider
 ├── schemas/              # Zod schemas (login, register, gear, rental, review, profile, change-password)
 ├── services/             # API service layer (auth, gear, rental, category, user, payment, review, dashboard, admin)
 ├── store/                # Zustand auth store
@@ -166,7 +173,7 @@ src/
 
 ---
 
-# ⚙️ Environment Variables
+## Environment Variables
 
 Create `.env.local`:
 
@@ -178,82 +185,28 @@ NEXT_PUBLIC_APP_URL=https://your-vercel-url.vercel.app
 
 ---
 
-# 🚀 Getting Started
+## Getting Started
 
-## 📦 Install Dependencies
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-## ▶️ Run Development Server
+### Run Development Server
 
 ```bash
 npm run dev
 ```
 
-## 🏗️ Build for Production
+### Build for Production
 
 ```bash
 npm run build
 ```
 
-## 🚀 Start Production Server
-
-```bash
-npm start
-```
-
 ---
 
-# 💳 Payment
-
-GearUp uses **Stripe Checkout** for secure online payments.
-
-**Stripe Test Card:**
-
-```text
-Card Number : 4242 4242 4242 4242
-Expiry Date : Any future date
-CVV         : Any 3 digits
-ZIP Code    : Any valid ZIP
-```
-
----
-
-# 🔒 Role-Based Routing
-
-| Role | Dashboard | Prefix |
-|------|-----------|--------|
-| Customer | `/dashboard/customer` | Orders, Reviews |
-| Provider | `/dashboard/provider` | Gear, Orders, Reviews |
-| Admin | `/dashboard/admin` | Users, Gears, Rentals, Payments, Categories, Reviews |
-
-Next.js Middleware protects all private routes based on the authenticated user's role parsed from the JWT access token cookie.
-
----
-
-# 📚 API Documentation
-
-See [API_INTEGRATION.md](./API_INTEGRATION.md) for complete frontend ↔ backend endpoint mapping.
-
----
-
-# 🔗 Backend
-
-- **Repository**: https://github.com/mesbahtoha/GearUp-Backend-B7A4
-- **Live API**: https://gearup-backend-b7a4.onrender.com
-
----
-
-# ☁️ Deployment
-
-- **Frontend**: Vercel
-- **Backend**: Render
-- **Database**: Neon PostgreSQL
-
----
-
-# 👨‍💻 Author
+## Author
 
 **Md. Mesbahul Alam**

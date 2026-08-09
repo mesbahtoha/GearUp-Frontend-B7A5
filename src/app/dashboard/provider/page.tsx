@@ -9,6 +9,7 @@ import RefreshButton from "@/components/ui/RefreshButton";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { formatPrice } from "@/lib/utils";
 import { Package, ShoppingBag, Clock, CheckCircle, RefreshCw, DollarSign, ArrowRight } from "lucide-react";
+import { StatusPieChart } from "@/components/shared/Charts";
 
 export default function ProviderDashboardPage() {
   const { data, isLoading } = useQuery({
@@ -63,6 +64,17 @@ export default function ProviderDashboardPage() {
           );
         })}
       </div>
+
+      <Card className="p-5">
+        <StatusPieChart
+          data={[
+            { name: "Pending", value: stats?.pendingOrders || 0, color: "#f59e0b" },
+            { name: "Confirmed", value: stats?.confirmedOrders || 0, color: "#2563eb" },
+            { name: "Returned", value: stats?.returnedOrders || 0, color: "#059669" },
+          ]}
+          title="Orders by Status"
+        />
+      </Card>
 
       <div className="flex gap-3">
         <Link href="/dashboard/provider/gear/new">

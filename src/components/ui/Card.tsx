@@ -10,8 +10,8 @@ export function Card({ children, className, hover }: CardProps) {
   return (
     <div
       className={cn(
-        "bg-white rounded-xl border border-gray-200",
-        hover && "transition-shadow hover:shadow-md",
+        "bg-white rounded-xl border border-gray-200 dark:bg-slate-900 dark:border-slate-800",
+        hover && "transition-shadow hover:shadow-md dark:hover:border-slate-700",
         className,
       )}
     >
@@ -44,7 +44,7 @@ interface CardDescriptionProps {
 }
 
 export function CardDescription({ children, className }: CardDescriptionProps) {
-  return <p className={cn("text-sm text-gray-500", className)}>{children}</p>;
+  return <p className={cn("text-sm text-gray-500 dark:text-slate-400", className)}>{children}</p>;
 }
 
 interface CardContentProps {

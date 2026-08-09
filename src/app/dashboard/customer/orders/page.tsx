@@ -21,22 +21,17 @@ function OrdersContent() {
   const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("");
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const paymentSuccess = searchParams.get("payment_success") === "true";
 
   useEffect(() => {
-    if (searchParams.get("payment_success") === "true") {
-      setPaymentSuccess(true);
+    if (paymentSuccess) {
       qc.invalidateQueries({ queryKey: ["my-rentals"] });
       toast.success("Payment successful!");
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("payment_success");
       router.replace(`/dashboard/customer/orders${newParams.toString() ? `?${newParams.toString()}` : ""}`, { scroll: false });
     }
-  }, [searchParams, qc, router]);
-
-  useEffect(() => {
-    setPaymentSuccess(false);
-  }, [statusFilter]);
+  }, [paymentSuccess, searchParams, qc, router]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["my-rentals", page, statusFilter],

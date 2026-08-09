@@ -2,17 +2,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuthStore } from "@/store/authStore";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, isAuthenticated, initialized } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return;
-    if (!user) {
-      router.push("/login");
+    if (!initialized) return;
+    if (!isAuthenticated || !user) {
+      router.push("/auth/login");
       return;
     }
     switch (user.role) {
@@ -26,9 +26,9 @@ export default function DashboardPage() {
         router.push("/dashboard/customer");
         break;
       default:
-        router.push("/login");
+        router.push("/auth/login");
     }
-  }, [user, loading, router]);
+  }, [user, isAuthenticated, initialized, router]);
 
   return <LoadingSpinner size="lg" />;
 }
