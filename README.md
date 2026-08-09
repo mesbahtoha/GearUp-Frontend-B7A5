@@ -4,7 +4,7 @@ GearUp is a full-stack Sports & Outdoor Gear Rental Platform built with **Next.j
 
 ---
 
-## Live Demo
+## Live Deployments
 
 ### Frontend
 https://gear-up-frontend-b7-a5.vercel.app
@@ -14,20 +14,16 @@ https://gearup-backend-b7a4.onrender.com
 
 ---
 
-## Video Explanation
+## Authentication
 
-> **Demo Video:**
-> https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drivesdk
+Authentication is limited to **registered users only**:
 
----
+- **Register** an account (Customer or Provider) with name, email, and password
+- **Sign in** with your registered email & password
+- **Sign in** with **Google OAuth**
+- No demo accounts, no demo login buttons
 
-## Demo Credentials
-
-| Role | Email | Password |
-|------|-------|----------|
-| **Customer** | toha@gmail.com | toha123 |
-| **Provider** | provider@gmail.com | provider123 |
-| **Admin** | admin@gmail.com | admin123 |
+Newly registered customers can use the platform right away. Providers must register with the Provider role. Admin access is provisioned by the platform owner via the database seed (see the Backend README).
 
 ---
 
@@ -35,14 +31,13 @@ https://gearup-backend-b7a4.onrender.com
 
 ### Authentication
 - JWT Authentication (httpOnly Cookie + localStorage)
-- Login & Registration
+- Register & Login with email/password
 - **Social Login (Google OAuth)**
 - Role-based Authorization
 - Protected Routes via Next.js Middleware
 - Automatic Access Token Refresh (401 retry)
-- Change Password
+- Forgot / Change Password
 - Profile Management (name, phone, profile image)
-- One-click Demo Login buttons on the Login page
 
 ### Public Features
 - Hero Slider Homepage
@@ -113,16 +108,6 @@ https://gearup-backend-b7a4.onrender.com
 - **Gravatar** (profile avatars)
 - **jose** (JWT parsing)
 - **class-variance-authority** + **tailwind-merge** (component styling)
-
-### Backend
-- Node.js + Express.js
-- TypeScript
-- Prisma ORM (PostgreSQL / Neon)
-- JWT Authentication
-- **Zod validation middleware**
-- **Google OAuth 2.0**
-- Stripe Payment
-- Image Upload
 
 ---
 

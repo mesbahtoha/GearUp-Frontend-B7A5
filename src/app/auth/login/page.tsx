@@ -9,7 +9,7 @@ import { z } from "zod";
 import { loginUser } from "@/lib/auth";
 import { useAuthStore } from "@/store/authStore";
 import { getMyProfile } from "@/lib/auth";
-import { Dumbbell, Sparkles } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -21,12 +21,6 @@ const loginSchema = z.object({
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
-
-const demoAccounts = [
-  { label: "Customer", email: "toha@gmail.com", password: "toha123" },
-  { label: "Provider", email: "provider@gmail.com", password: "provider123" },
-  { label: "Admin", email: "admin@gmail.com", password: "admin123" },
-];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -47,7 +41,6 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -85,19 +78,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async (email: string, password: string) => {
-    setValue("email", email);
-    setValue("password", password);
-    setLoading(true);
-    try {
-      await doLogin(email, password);
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleGoogleLogin = () => {
     setGoogleLoading(true);
     window.location.href = `${BASE_URL}/api/auth/google`;
@@ -110,26 +90,6 @@ export default function LoginPage() {
           <Dumbbell className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 mb-2" />
           <h1 className="text-2xl font-bold">Welcome Back</h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">Sign in to your GearUp account</p>
-        </div>
-
-        {/* Demo login */}
-        <div className="mb-5">
-          <p className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-            Try a demo account
-          </p>
-          <div className="grid grid-cols-3 gap-2">
-            {demoAccounts.map((acc) => (
-              <button
-                key={acc.label}
-                type="button"
-                onClick={() => handleDemoLogin(acc.email, acc.password)}
-                className="px-3 py-2 rounded-lg border border-primary-200 dark:border-primary-900 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 text-xs font-semibold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors flex items-center justify-center gap-1"
-              >
-                <Sparkles className="w-3 h-3" />
-                {acc.label}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="relative my-5">
