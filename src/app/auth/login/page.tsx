@@ -94,7 +94,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
+    <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Dumbbell className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 mb-2" />
