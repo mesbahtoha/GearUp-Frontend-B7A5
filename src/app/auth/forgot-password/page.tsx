@@ -60,12 +60,12 @@ export default function ForgotPasswordPage() {
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Dumbbell className="w-12 h-12 mx-auto text-primary-600 mb-2" />
+          <Dumbbell className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 mb-2" />
           <h1 className="text-2xl font-bold">Reset Password</h1>
-          <p className="text-gray-500 text-sm mt-1">Enter your email, current password, and a new password</p>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Enter your email, current password, and a new password</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-xl border border-gray-200 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-gray-200 dark:border-slate-700 space-y-4">
           <Input
             id="email"
             label="Email"
@@ -104,8 +104,8 @@ export default function ForgotPasswordPage() {
           <Button type="submit" loading={loading} className="w-full">
             Reset Password
           </Button>
-          <p className="text-center text-sm text-gray-500">
-            <Link href="/auth/login" className="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center gap-1">
+          <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+            <Link href="/auth/login" className="text-primary-600 dark:text-primary-400 hover:text-primary-700 font-medium inline-flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" />
               Back to login
             </Link>
