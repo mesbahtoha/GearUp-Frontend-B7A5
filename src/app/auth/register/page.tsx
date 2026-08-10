@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
+import RedirectIfAuthenticated from "@/components/shared/RedirectIfAuthenticated";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -55,6 +56,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-8">
+      <RedirectIfAuthenticated />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Dumbbell className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 mb-2" />

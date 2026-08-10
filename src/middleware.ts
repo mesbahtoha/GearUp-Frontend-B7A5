@@ -24,6 +24,7 @@ const customerRoutes = ["/dashboard/customer"];
 const providerRoutes = ["/dashboard/provider"];
 const adminRoutes = ["/dashboard/admin"];
 const protectedRoutes = ["/dashboard", "/payment-success", "/payment-cancel"];
+const authRoutes = ["/auth/login", "/auth/register", "/auth/forgot-password"];
 
 function isTokenValid(token: string): boolean {
   const payload = parseJwt(token);
@@ -32,14 +33,25 @@ function isTokenValid(token: string): boolean {
   return true;
 }
 
+function getDashboardPath(role?: string): string {
+  if (role === "ADMIN") return "/dashboard/admin";
+  if (role === "PROVIDER") return "/dashboard/provider";
+  return "/dashboard/customer";
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("accessToken")?.value;
   const validToken = !!token && isTokenValid(token);
   const payload = validToken && token ? parseJwt(token) : null;
 
-  // Auth pages (login/register) are always reachable so users can
-  // switch accounts (e.g. sign in with a different Google account).
+  // Authenticated users must not reach auth pages (login/register/forgot-password).
+  // Redirect them to their dashboard so browser Back (or any navigation) from a
+  // logged-in session never lands on an auth form again.
+  if (validToken && authRoutes.some((route) => pathname.startsWith(route))) {
+    return NextResponse.redirect(new URL(getDashboardPath(payload?.role), request.url));
+  }
+
   if (protectedRoutes.some((route) => pathname.startsWith(route)) && !validToken) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }

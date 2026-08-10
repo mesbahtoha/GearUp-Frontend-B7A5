@@ -11,6 +11,7 @@ import { Dumbbell, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import RedirectIfAuthenticated from "@/components/shared/RedirectIfAuthenticated";
 
 const forgotSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -58,6 +59,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
+      <RedirectIfAuthenticated />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Dumbbell className="w-12 h-12 mx-auto text-primary-600 dark:text-primary-400 mb-2" />
