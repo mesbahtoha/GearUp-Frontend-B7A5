@@ -9,6 +9,7 @@ import { z } from "zod";
 import { loginUser } from "@/lib/auth";
 import { useAuthStore } from "@/store/authStore";
 import { getMyProfile } from "@/lib/auth";
+import { setAccessToken } from "@/lib/api";
 import { Dumbbell } from "lucide-react";
 import toast from "react-hot-toast";
 import Button from "@/components/ui/Button";
@@ -53,6 +54,55 @@ export default function LoginPage() {
     else router.replace("/dashboard/customer");
   };
 
+  // Receive tokens from the Google OAuth popup (see /auth/oauth-callback).
+  // The popup holds all the Google/backend redirect history, so the main
+  // window's history stays clean and Back never returns to Google or auth pages.
+  useEffect(() => {
+    const handleOAuthMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      const data = event.data as
+        | {
+            type?: string;
+            accessToken?: string;
+            refreshToken?: string;
+            role?: string;
+          }
+        | undefined;
+
+      if (!data || data.type !== "GOOGLE_OAUTH_SUCCESS") return;
+      if (!data.accessToken || !data.refreshToken || !data.role) {
+        toast.error("Google login failed. Please try again.");
+        setGoogleLoading(false);
+        return;
+      }
+
+      setGoogleLoading(false);
+      setAccessToken(data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      document.cookie = `accessToken=${data.accessToken}; path=/; max-age=86400; SameSite=Lax`;
+
+      (async () => {
+        try {
+          const profile = await getMyProfile();
+          if (profile.success && profile.data) {
+            setUser(profile.data);
+            toast.success("Logged in successfully!");
+            redirectByRole(profile.data.role);
+            return;
+          }
+        } catch {
+          // fall through and redirect by the role from the OAuth payload
+        }
+        toast.success("Logged in successfully!");
+        redirectByRole(data.role);
+      })();
+    };
+
+    window.addEventListener("message", handleOAuthMessage);
+    return () => window.removeEventListener("message", handleOAuthMessage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, setUser]);
+
   const doLogin = async (email: string, password: string) => {
     const res = await loginUser(email, password);
     if (res.success) {
@@ -81,9 +131,29 @@ export default function LoginPage() {
 
   const handleGoogleLogin = () => {
     setGoogleLoading(true);
-    // Use replace so the login page is not kept in history and the browser
-    // Back button cannot return to Google/auth pages after signing in.
-    window.location.replace(`${BASE_URL}/api/auth/google`);
+
+    // Run the whole OAuth redirect chain (backend -> Google -> backend ->
+    // oauth-callback) inside a popup. Its history is discarded on close, so the
+    // main window never keeps Google OAuth URLs and Back stays clean.
+    const popup = window.open(
+      `${BASE_URL}/api/auth/google`,
+      "googleOAuth",
+      "width=520,height=600,left=200,top=150"
+    );
+
+    if (!popup) {
+      setGoogleLoading(false);
+      toast.error("Popup blocked. Please allow popups for this site and try again.");
+      return;
+    }
+
+    // If the user closes the popup without completing login, reset the button.
+    const poll = window.setInterval(() => {
+      if (popup.closed) {
+        window.clearInterval(poll);
+        setGoogleLoading(false);
+      }
+    }, 500);
   };
 
   return (
@@ -110,7 +180,7 @@ export default function LoginPage() {
             <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.18a11 11 0 0 0 0 9.88l3.66-2.84z" />
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15A11 11 0 0 0 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
           </svg>
-          {googleLoading ? "Redirecting to Google..." : "Continue with Google"}
+          {googleLoading ? "Opening Google sign-in..." : "Continue with Google"}
         </button>
 
          <div className="relative my-5">

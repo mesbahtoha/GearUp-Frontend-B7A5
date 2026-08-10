@@ -33,6 +33,24 @@ export default function OAuthCallbackPage() {
     // so the auth flow never remains in browser history.
     window.history.replaceState(null, "", window.location.pathname);
 
+    // Popup flow: the Google OAuth redirect chain ran in this popup. Hand the
+    // tokens to the login page that opened it, then close — the popup's history
+    // (Google account chooser, consent, backend URLs) is discarded with it.
+    if (window.opener) {
+      window.opener.postMessage(
+        {
+          type: "GOOGLE_OAUTH_SUCCESS",
+          accessToken,
+          refreshToken,
+          role,
+        },
+        window.location.origin
+      );
+      window.close();
+      return;
+    }
+
+    // Fallback (popup blocked / direct visit): full-page flow.
     (async () => {
       try {
         const profile = await getMyProfile();
