@@ -45,6 +45,23 @@ export function middleware(request: NextRequest) {
   const validToken = !!token && isTokenValid(token);
   const payload = validToken && token ? parseJwt(token) : null;
 
+  // Prefetch requests (Next.js `<Link>` viewport/hover prefetches) must NOT be
+  // redirected. The client router caches the response of a prefetch under the
+  // requested URL, so a redirect here would cache the login page's flight data
+  // for e.g. /dashboard/profile. After login, clicking "Profile" would then
+  // replay that stale cached entry and the navigation would silently fail until
+  // a full page load (refresh) clears the router state.
+  // Note: when this middleware runs in the Node runtime (`next start`), this
+  // Next version strips flight headers (rsc, next-router-prefetch, ...) before
+  // middleware sees them (next/dist/server/web/adapter.js), so the branch below
+  // never fires locally. On edge runtimes (e.g. Vercel) the headers DO reach the
+  // middleware, which is exactly where the poisoned-prefetch cache was observed.
+  // The client-side fixes (Footer links + AuthInitializer cookie check) cover
+  // both environments.
+  if (request.headers.get("next-router-prefetch") !== null) {
+    return NextResponse.next();
+  }
+
   // Authenticated users must not reach auth pages (login/register/forgot-password).
   // Redirect them to their dashboard so browser Back (or any navigation) from a
   // logged-in session never lands on an auth form again.

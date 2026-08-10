@@ -13,10 +13,13 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const cookieToken = document.cookie.replace(/(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
-    const localToken = localStorage.getItem("accessToken");
-    const token = localToken || cookieToken;
-
-    if (!token) {
+    // The middleware's auth decisions are driven by the accessToken COOKIE. If the
+    // cookie is gone (logged out / expired) but a token lingers in localStorage,
+    // restoring the user here would render logged-in UI (dashboard links) whose
+    // prefetches get redirected by the middleware -> the router caches those
+    // redirects and subsequent navigations fail silently. Only restore when the
+    // cookie (the middleware's source of truth) says the session is alive.
+    if (!cookieToken) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       setUser(null);
@@ -27,9 +30,19 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
 
     getMyProfile()
       .then((res) => {
-        if (res.success && res.data) setUser(res.data);
+        if (res.success && res.data) {
+          setUser(res.data);
+        } else {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          setUser(null);
+        }
       })
-      .catch(() => {})
+      .catch(() => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        setUser(null);
+      })
       .finally(() => {
         setInitialized(true);
         setLocalInitialized(true);

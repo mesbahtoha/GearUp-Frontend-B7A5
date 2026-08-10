@@ -24,7 +24,7 @@ export default function Footer() {
     { label: "Login", href: "/auth/login" },
     { label: "Register", href: "/auth/register" },
     { label: "Dashboard", href: user ? dashboardLink : "/auth/login" },
-    { label: "Profile", href: "/dashboard/profile" },
+    { label: "Profile", href: user ? "/dashboard/profile" : "/auth/login" },
   ];
 
   const supportLinks = [
