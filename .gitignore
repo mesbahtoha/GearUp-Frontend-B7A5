@@ -1,15 +1,11 @@
-<<<<<<< HEAD
+# Dependencies
 node_modules
+
+# Next.js build output
 .next
-.env.local
-.env
 *.tsbuildinfo
-next-env.d.ts
-=======
-.next
-node_modules
+
+# Environment
 .env
 .env.local
-tsconfig.tsbuildinfo
-*.tsbuildinfo
->>>>>>> c91864fb1de157918fa0e8ba36aa8164b76f2564
+.env.production
