@@ -81,7 +81,9 @@ export default function LoginPage() {
 
   const handleGoogleLogin = () => {
     setGoogleLoading(true);
-    window.location.href = `${BASE_URL}/api/auth/google`;
+    // Use replace so the login page is not kept in history and the browser
+    // Back button cannot return to Google/auth pages after signing in.
+    window.location.replace(`${BASE_URL}/api/auth/google`);
   };
 
   return (

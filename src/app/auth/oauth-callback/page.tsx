@@ -29,7 +29,9 @@ export default function OAuthCallbackPage() {
     localStorage.setItem("refreshToken", refreshToken);
     document.cookie = `accessToken=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
 
-    window.location.hash = "";
+    // Remove the token fragment from the URL without adding a new history entry,
+    // so the auth flow never remains in browser history.
+    window.history.replaceState(null, "", window.location.pathname);
 
     (async () => {
       try {
