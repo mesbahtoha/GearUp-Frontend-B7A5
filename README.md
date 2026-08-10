@@ -25,13 +25,27 @@ https://drive.google.com/file/d/1kyZACJthg4hZlQ-kyNz9QBrRNdszE22r/view?usp=drive
 
 ---
 
-## 👨‍💼 Admin Credentials
+## 👨‍💼 Login Credentials
 
-Use the following credentials to explore the Admin Dashboard:
+Use the following credentials to explore the Role-wise Dashboard:
+
+**Admin Credentials**
 
 | Email             | Password   |
 | ----------------- | ---------- |
 | `admin@gmail.com` | `admin123` |
+
+**Provider Credentials**
+
+| Email             | Password   |
+| ----------------- | ---------- |
+| `provider@gmail.com` | `provider123` |
+
+**User Credentials**
+
+| Email             | Password   |
+| ----------------- | ---------- |
+| `momtaz@gmail.com` | `momtaz4321` |
 
 > ⚠️ These credentials are provided for demonstration and testing purposes.
 
