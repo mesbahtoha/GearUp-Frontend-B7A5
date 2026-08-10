@@ -40,7 +40,10 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterForm) => {
     setLoading(true);
     try {
-      const res = await registerUser(data);
+      const res = await registerUser({
+        ...data,
+        phone: data.phone?.trim() || undefined,
+      });
       if (res.success) {
         toast.success("Registered successfully! Please login.");
         router.push("/auth/login");

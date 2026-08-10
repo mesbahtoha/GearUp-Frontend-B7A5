@@ -1,4 +1,5 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_BASE = RAW_API_URL.replace(/\/api\/?$/, "").replace(/\/+$/, "");
 
 type FetchOptions = RequestInit;
 
@@ -6,7 +7,7 @@ export const fetchData = async (
   endpoint: string,
   options?: FetchOptions
 ) => {
-  const response = await fetch(`${BASE_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE}/api${endpoint}`, {
     ...options,
     credentials: "include",
     headers: {
